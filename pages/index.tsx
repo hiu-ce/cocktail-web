@@ -4,9 +4,8 @@ import type {
   InferGetServerSidePropsType,
   NextPage,
 } from 'next';
-import Head from 'next/head';
-import Image from 'next/image';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css';
 import { getCocktailNames, getCocktails, getIngredientNames } from './lib/api';
 import { ingredientType } from './lib/constant';
@@ -43,10 +42,16 @@ const Home: NextPage = ({
   randomCocktail,
   ingredientsGroup,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  // console.log(props);
-  // const  =
-  //   props;
   const [opened, setOpened] = useState(false);
+  const router = useRouter();
+
+  // call this method whenever you want to refresh server-side props
+  const refreshData = () => router.replace(router.asPath);
+
+  useEffect(() => {
+    refreshData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opened]);
 
   return (
     <div className={styles.container}>
@@ -118,6 +123,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const ingredientsName = Object.values(ingredientsData).map((data, index) => {
     return data.map((d) => ({
       value: d.drink_name ? d.drink_name : d.name,
+      key: `ingredient--${d.drink_name ? d.drink_name : d.name}--${
+        ingreGroupName[index]
+      }`,
       group: ingreGroupName[index],
       groupkey: ingredientType[index],
     }));

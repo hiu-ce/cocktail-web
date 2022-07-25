@@ -168,21 +168,21 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
         <Button
           disabled={error}
           type="submit"
-          // onClick={() => {
-          //   showNotification({
-          //     id: 'post-cocktail',
-          //     loading: true,
-          //     title: 'Add cocktail data',
-          //     message: `칵테일 ${cocktailName} 등록 중입니다`,
-          //     autoClose: false,
-          //     disallowClose: true,
-          //   });
-          //   postCocktail.mutate({
-          //     cocktail_name: cocktailName,
-          //     ...ingredientValue,
-          //     recipe,
-          //   });
-          // }}
+          onClick={() => {
+            showNotification({
+              id: 'post-cocktail',
+              loading: true,
+              title: 'Add cocktail data',
+              message: `칵테일 ${cocktailName} 등록 중입니다`,
+              autoClose: false,
+              disallowClose: true,
+            });
+            postCocktail.mutate({
+              cocktail_name: cocktailName,
+              ...ingredientValue,
+              recipe,
+            });
+          }}
         >
           Submit
         </Button>
