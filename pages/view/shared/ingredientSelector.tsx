@@ -1,4 +1,4 @@
-import { Chip, Chips, Paper } from '@mantine/core';
+import { Chip, Paper } from '@mantine/core';
 import { useState } from 'react';
 
 interface Props {
@@ -9,13 +9,13 @@ export default function IngredientSelector({ ingredients }: Props) {
 
   return (
     <Paper shadow="xs" p="md">
-      <Chips multiple value={value} onChange={setValue}>
+      <Chip.Group multiple value={value} onChange={setValue}>
         {ingredients.map((data: any, index) => (
           <Chip value={data.value} key={index}>
             {data.value}
           </Chip>
         ))}
-      </Chips>
+      </Chip.Group>
     </Paper>
   );
 }

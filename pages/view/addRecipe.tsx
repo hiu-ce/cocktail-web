@@ -2,7 +2,7 @@ import {
   Box,
   Button,
   Group,
-  InputWrapper,
+  Input,
   ScrollArea,
   Textarea,
   TextInput,
@@ -107,7 +107,7 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
 
   return (
     <>
-      <InputWrapper
+      <Input.Wrapper
         id="input-demo"
         required
         label="Cocktail Name"
@@ -122,7 +122,7 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
           id="input-demo"
           placeholder="칵테일"
         />
-      </InputWrapper>
+      </Input.Wrapper>
       <ScrollArea
         style={{ height: '50vh' }}
         type="scroll"
@@ -149,7 +149,7 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
         <Box style={{ height: '40vh' }} />
       </ScrollArea>
 
-      <InputWrapper
+      <Input.Wrapper
         id="input-demo"
         required
         label="제작 방법"
@@ -163,7 +163,7 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
           maxRows={4}
           placeholder="ex) 재료를 모두 넣어 빌드한다"
         />
-      </InputWrapper>
+      </Input.Wrapper>
       <Group position="right" style={{ marginTop: 10 }}>
         <Button
           disabled={error}

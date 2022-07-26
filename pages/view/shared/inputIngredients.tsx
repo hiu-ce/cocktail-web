@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Chip,
-  Chips,
   Badge,
   Collapse,
   Divider,
@@ -11,10 +10,10 @@ import {
   Group,
   NumberInput,
   Paper,
-  Popover,
   Table,
   TextInput,
   ThemeIcon,
+  Popover,
 } from '@mantine/core';
 import { useFocusTrap, useFocusWithin } from '@mantine/hooks';
 import { useEffect, useRef } from 'react';
@@ -97,42 +96,45 @@ export function InputIngredients({
       >
         <Grid>
           <Grid.Col span={10}>
-            <Chips multiple value={includeIngr} onChange={setIncludeIngr}>
+            <Chip.Group multiple value={includeIngr} onChange={setIncludeIngr}>
               {values.map((value, index) => (
                 <Chip value={value} key={`addRecipe--${name}--${index}`}>
                   {value}
                 </Chip>
               ))}
-            </Chips>
-            <Chips
+              {/* </Chip.Group>
+            <Chip.Group
               sx={{ marginTop: 10 }}
-              variant="filled"
               multiple
               value={includeIngr}
               onChange={setIncludeIngr}
-            >
+            > */}
               {includeIngr
                 .filter((x) => !values.includes(x))
                 .map((value, index) => (
-                  <Chip value={value} key={`addRecipe--${name}--${index}`}>
+                  <Chip
+                    variant="filled"
+                    value={value}
+                    key={`addRecipe--${name}--${index}`}
+                  >
                     {value}
                   </Chip>
                 ))}
-            </Chips>
+            </Chip.Group>
           </Grid.Col>
           <Grid.Col span={2}>
             <Popover
               opened={opened}
               onClose={() => setOpened(false)}
-              target={
-                <Button onClick={() => setOpened((o) => !o)} size="xs">
-                  +
-                </Button>
-              }
               width={260}
               position="bottom"
               withArrow
             >
+              <Popover.Target>
+                <Button onClick={() => setOpened((o) => !o)} size="xs">
+                  +
+                </Button>
+              </Popover.Target>
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
