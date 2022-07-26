@@ -34,7 +34,7 @@ interface InputIngredientsProps {
   isScrolling: boolean;
 }
 
-export function InputIngredients({
+export default function InputIngredients({
   ingredient,
   ingredientValue,
   setIngredientValue,
