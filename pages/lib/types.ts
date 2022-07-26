@@ -10,7 +10,9 @@ export type SearchItem = {
   value: string;
   group: string;
   groupkey: string;
-}[];
+};
+
+export type SearchItems = SearchItem[];
 
 export type IngredientsName = {
   value: string;
