@@ -24,7 +24,7 @@ export type ResIngredients = Record<IngredientType, ResIngredient>;
 // {
 //   [Key in IngredientType]?: ResIngredient;
 // };
-export interface ResCocktail extends Partial<ResIngredient> {
+export interface ResCocktail extends Partial<ResIngredients> {
   cocktail_name: string;
   recipe: string;
 }
