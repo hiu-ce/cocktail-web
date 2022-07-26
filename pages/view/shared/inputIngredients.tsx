@@ -135,34 +135,36 @@ export function InputIngredients({
                   +
                 </Button>
               </Popover.Target>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  onSubmit();
-                }}
-              >
-                <Box sx={{ display: 'flex' }}>
-                  <TextInput
-                    icon={
-                      <ThemeIcon
-                        size="lg"
-                        variant="gradient"
-                        gradient={{ from: 'teal', to: 'blue', deg: 60 }}
-                      >
-                        <GlassFull size={16} />{' '}
-                      </ThemeIcon>
-                    }
-                    placeholder={`New ${name}`}
-                    variant="filled"
-                    value={newIngr}
-                    onChange={(event: any) =>
-                      setNewIngr(event.currentTarget.value)
-                    }
-                    styles={{ rightSection: { pointerEvents: 'none' } }}
-                  />
-                  <Button type="submit">Add</Button>
-                </Box>
-              </form>
+              <Popover.Dropdown>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    onSubmit();
+                  }}
+                >
+                  <Box sx={{ display: 'flex' }}>
+                    <TextInput
+                      icon={
+                        <ThemeIcon
+                          size="lg"
+                          variant="gradient"
+                          gradient={{ from: 'teal', to: 'blue', deg: 60 }}
+                        >
+                          <GlassFull size={16} />{' '}
+                        </ThemeIcon>
+                      }
+                      placeholder={`New ${name}`}
+                      variant="filled"
+                      value={newIngr}
+                      onChange={(event: any) =>
+                        setNewIngr(event.currentTarget.value)
+                      }
+                      styles={{ rightSection: { pointerEvents: 'none' } }}
+                    />
+                    <Button type="submit">Add</Button>
+                  </Box>
+                </form>
+              </Popover.Dropdown>
             </Popover>
           </Grid.Col>
           <Grid.Col span={12}>
