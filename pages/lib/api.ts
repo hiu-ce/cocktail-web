@@ -1,33 +1,32 @@
 import axios from 'axios';
 import type { ReqCocktail, ReqIngredients } from './req.types';
 import type { IngredientType } from './types';
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export async function getCocktails(name: string) {
-  const response = await axios.get(
-    `http://35.84.255.61:8000/cocktail/${encodeURIComponent(name)}`
-  );
+  const response = await axios.get(`/cocktail/${encodeURIComponent(name)}`);
   return response.data;
 }
 
 export async function createCocktail(body: ReqCocktail) {
-  const response = await axios.post('http://35.84.255.61:8000/cocktail', {
+  const response = await axios.post('/cocktail', {
     ...body,
   });
   return response.data;
 }
 
 export async function deleteCocktails() {
-  const response = await axios.delete(`http://35.84.255.61:8000/cocktail`);
+  const response = await axios.delete(`/cocktail`);
   return response.data;
 }
 
 export async function getCocktailNames() {
-  const response = await axios.get('http://35.84.255.61:8000/recipes');
+  const response = await axios.get('/recipes');
   return response.data;
 }
 
 export async function getIngredientNames(type: IngredientType | null = null) {
-  const response = await axios.get('http://35.84.255.61:8000/ingredients', {
+  const response = await axios.get('/ingredients', {
     params: {
       type,
     },
@@ -41,7 +40,7 @@ export async function searchCocktails({
   juice,
   other,
 }: ReqIngredients) {
-  const response = await axios.get('http://35.84.255.61:8000/search', {
+  const response = await axios.get('/search', {
     params: {
       base,
       sub,
