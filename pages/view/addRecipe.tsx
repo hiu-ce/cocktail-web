@@ -15,7 +15,7 @@ import { Check, X } from 'tabler-icons-react';
 import { createCocktail } from '../../api/api';
 import { ReqIngredients } from '../../lib/req.types';
 import { IngredientsGroup } from '../../lib/types';
-import { InputIngredients } from './shared/inputIngredients';
+import InputIngredients from './shared/inputIngredients';
 
 interface Props {
   setOpened: (opened: boolean) => void;
