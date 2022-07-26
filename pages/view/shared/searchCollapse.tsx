@@ -11,8 +11,8 @@ import {
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ChevronsUp, FoldUp, GlassFull } from 'tabler-icons-react';
-import { getCocktails } from '../../lib/api';
-import { ResCocktail, ResCocktailsName } from '../../lib/res.types';
+import { getCocktails } from '../../../api/api';
+import { ResCocktail, ResCocktailsName } from '../../../lib/res.types';
 import CocktailView from './cocktailView';
 
 interface Props {

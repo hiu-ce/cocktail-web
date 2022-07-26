@@ -7,14 +7,14 @@ import type {
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import styles from '../styles/Home.module.css';
-import { getCocktailNames, getCocktails, getIngredientNames } from './lib/api';
-import { ingredientType } from './lib/constant';
+import { getCocktailNames, getCocktails, getIngredientNames } from '../api/api';
+import { ingredientType } from '../lib/constant';
 import {
   ResCocktail,
   ResCocktailsName,
   ResIngredientsName,
-} from './lib/res.types';
-import { IngredientsGroup, IngredientType } from './lib/types';
+} from '../lib/res.types';
+import { IngredientsGroup, IngredientType } from '../lib/types';
 import AddRecipe from './view/addRecipe';
 import Ingredient from './view/ingredient';
 import SearchBar from './view/searchBar';

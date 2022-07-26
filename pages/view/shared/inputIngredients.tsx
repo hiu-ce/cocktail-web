@@ -21,9 +21,9 @@ import { useState } from 'react';
 import { GlassFull, Trash } from 'tabler-icons-react';
 import type { NumberInputHandlers } from '@mantine/core';
 import { ObjectTyped } from 'object-typed';
-import { IngredientsGroup, IngredientType } from '../../lib/types';
-import { ReqIngredients } from '../../lib/req.types';
-import { ResIngredient } from '../../lib/res.types';
+import { IngredientsGroup, IngredientType } from '../../../lib/types';
+import { ReqIngredients } from '../../../lib/req.types';
+import { ResIngredient } from '../../../lib/res.types';
 
 interface InputIngredientsProps {
   ingredient: IngredientsGroup;

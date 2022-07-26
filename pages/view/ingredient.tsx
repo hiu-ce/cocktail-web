@@ -1,4 +1,4 @@
-import { IngredientsName } from '../lib/types';
+import { IngredientsName } from '../../lib/types';
 import IngredientSelector from './shared/ingredientSelector';
 
 interface Props {

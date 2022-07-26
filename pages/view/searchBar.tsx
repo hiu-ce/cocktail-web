@@ -14,10 +14,10 @@ import { ObjectTyped } from 'object-typed';
 import { useEffect } from 'react';
 import { MouseEventHandler, useState } from 'react';
 import { ChevronsDown, PlaylistX, Search, X } from 'tabler-icons-react';
-import { getCocktails, searchCocktails } from '../lib/api';
-import { ReqIngredient } from '../lib/req.types';
-import { ResCocktail } from '../lib/res.types';
-import { IngredientType, SearchItem, SearchItems } from '../lib/types';
+import { getCocktails, searchCocktails } from '../../api/api';
+import { ReqIngredient } from '../../lib/req.types';
+import { ResCocktail } from '../../lib/res.types';
+import { IngredientType, SearchItem, SearchItems } from '../../lib/types';
 import CocktailView from './shared/cocktailView';
 import SearchCollapse from './shared/searchCollapse';
 
