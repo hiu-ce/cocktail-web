@@ -1,4 +1,4 @@
-import { Button, Group, Modal } from '@mantine/core';
+import { Button, Center, Grid, Group, Modal } from '@mantine/core';
 import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -18,7 +18,7 @@ import { IngredientsGroup, IngredientType } from './lib/types';
 import AddRecipe from './view/addRecipe';
 import Ingredient from './view/ingredient';
 import SearchBar from './view/searchBar';
-import Title from './view/title';
+import CocktailTitle from './view/title';
 import TodayDrink from './view/todayDrink';
 
 interface Props {
@@ -54,25 +54,42 @@ const Home: NextPage = ({
   }, [opened]);
 
   return (
-    <div className={styles.container}>
-      <Title />
-      <SearchBar searchItem={searchItem} />
-      <TodayDrink />
-      <Ingredient ingredientsName={ingredientsName} />
-      <Modal
-        centered
-        opened={opened}
-        onClose={() => setOpened(false)}
-        title="Add cocktail recipe"
-        size="lg"
-        style={{ overflow: 'hidden' }}
-      >
-        <AddRecipe setOpened={setOpened} ingredientsGroup={ingredientsGroup} />
-      </Modal>
-      <Group position="center">
-        <Button onClick={() => setOpened(true)}>Open Modal</Button>
-      </Group>
-    </div>
+    <Center>
+      <Grid style={{ width: '80vw' }}>
+        <Grid.Col xs={12}>
+          <Center>
+            <CocktailTitle />
+          </Center>
+        </Grid.Col>
+        <Grid.Col xs={12} style={{ width: '100%' }}>
+          <Center style={{ width: '100%' }}>
+            <SearchBar searchItem={searchItem} />
+          </Center>
+        </Grid.Col>
+        <Grid.Col xs={6}>
+          <TodayDrink />
+        </Grid.Col>
+        <Grid.Col xs={6}>
+          <Ingredient ingredientsName={ingredientsName} />
+          <Modal
+            centered
+            opened={opened}
+            onClose={() => setOpened(false)}
+            title="Add cocktail recipe"
+            size="lg"
+            style={{ overflow: 'hidden' }}
+          >
+            <AddRecipe
+              setOpened={setOpened}
+              ingredientsGroup={ingredientsGroup}
+            />
+          </Modal>
+        </Grid.Col>
+        <Group position="center">
+          <Button onClick={() => setOpened(true)}>Open Modal</Button>
+        </Group>
+      </Grid>
+    </Center>
   );
 };
 
