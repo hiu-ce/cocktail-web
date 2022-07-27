@@ -1,14 +1,28 @@
-import { Chip, Paper } from '@mantine/core';
-import { useState } from 'react';
+import { Chip, Divider, Paper } from '@mantine/core';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { IngredientsNameArr, SelectSearchItems } from '../../lib/types';
 
 interface Props {
-  ingredients: [];
+  ingredients: IngredientsNameArr;
+  state: [SelectSearchItems, Dispatch<SetStateAction<SelectSearchItems>>];
+  ingrName: { name: string; key: string };
 }
-export default function IngredientSelector({ ingredients }: Props) {
+export default function IngredientSelector({
+  ingredients,
+  state,
+  ingrName,
+}: Props) {
   const [value, setValue] = useState<string[]>([]);
+  const [ingrState, setIngrState] = state;
+
+  useEffect(() => {
+    setIngrState({ ...ingrState, [ingrName.key]: value });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   return (
-    <Paper shadow="xs" p="md">
+    <Paper shadow="md" p="md" pt={2} my="md">
+      <Divider mt={0} mb="md" label={ingrName.name} labelPosition="center" />
       <Chip.Group multiple value={value} onChange={setValue}>
         {ingredients.map((data: any, index) => (
           <Chip value={data.value} key={index}>

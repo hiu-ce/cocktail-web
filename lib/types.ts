@@ -14,8 +14,12 @@ export type SearchItem = {
 
 export type SearchItems = SearchItem[];
 
-export type IngredientsName = {
+export type SelectSearchItems = Record<IngredientType, string[]>;
+
+export type IngredientsName = IngredientsNameArr[];
+
+export type IngredientsNameArr = {
   value: string;
   group: string;
   groupkey: IngredientType;
-}[][];
+}[];

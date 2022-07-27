@@ -10,3 +10,5 @@ export interface ReqCocktail extends ReqIngredients {
   cocktail_name: string;
   recipe: string;
 }
+
+export type ReqSearch = Record<IngredientType, string>;

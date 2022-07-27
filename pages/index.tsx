@@ -14,27 +14,15 @@ import {
   ResCocktailsName,
   ResIngredientsName,
 } from '../lib/res.types';
-import { IngredientsGroup, IngredientType } from '../lib/types';
+import {
+  IngredientsGroup,
+  IngredientType,
+  SelectSearchItems,
+} from '../lib/types';
 import AddRecipe from '../view/addRecipe';
-import Ingredient from '../view/ingredient';
 import SearchBar from '../view/searchBar';
 import CocktailTitle from '../view/title';
-import TodayDrink from '../view/todayDrink';
-
-interface Props {
-  searchItem: {
-    value: string;
-    group: string;
-    groupkey: string;
-  }[];
-  ingredientsName: {
-    value: string;
-    group: string;
-    groupkey: IngredientType;
-  }[][];
-  randomCocktail: ResCocktail;
-  ingredientsGroup: Partial<Record<IngredientType, string[]>>[];
-}
+import Body from '../view/body';
 
 const Home: NextPage = ({
   searchItem,
@@ -73,26 +61,20 @@ const Home: NextPage = ({
             <SearchBar searchItem={searchItem} />
           </Center>
         </Grid.Col>
-        <Grid.Col xs={6}>
-          <TodayDrink cocktail={randomCocktail} />
-        </Grid.Col>
-        <Grid.Col xs={6}>
-          <Ingredient ingredientsName={ingredientsName} />
-          <Modal
-            centered
-            opened={opened}
-            onClose={() => setOpened(false)}
-            title="Add cocktail recipe"
-            size="lg"
-            style={{ overflow: 'hidden' }}
-          >
-            <AddRecipe
-              setOpened={setOpened}
-              ingredientsGroup={ingredientsGroup}
-            />
-          </Modal>
+        <Grid.Col xs={12}>
+          <Body cocktail={randomCocktail} ingredientsName={ingredientsName} />
         </Grid.Col>
       </Grid>
+      <Modal
+        centered
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title="Add cocktail recipe"
+        size="lg"
+        style={{ overflow: 'hidden' }}
+      >
+        <AddRecipe setOpened={setOpened} ingredientsGroup={ingredientsGroup} />
+      </Modal>
     </Center>
   );
 };
@@ -125,21 +107,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const ingredientsData: ResIngredientsName = await getIngredientNames();
 
-  console.log(
-    (
-      Object.keys(ingredientsData) as unknown as Array<
-        keyof typeof ingredientsData
-      >
-    )[0]
-  );
-
   const ingredientsGroup: IngredientsGroup[] = Object.values(
     ingredientsData
   ).map((data, index) => ({
     [Object.keys(ingredientsData)[index]]: data.map((d) => Object.values(d)[0]),
   }));
-
-  console.log(ingredientsGroup);
 
   const ingredientsName = Object.values(ingredientsData).map((data, index) => {
     return data.map((d) => ({

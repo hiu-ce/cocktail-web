@@ -36,10 +36,7 @@ export default function SearchBar({ searchItem }: Props) {
   const [active, handlers] = useDisclosure(false);
 
   const searchMutate = useMutation(searchCocktails, {
-    onSuccess: (
-      data: any,
-      variables: Partial<Record<IngredientType, ReqIngredient>>
-    ) => {
+    onSuccess: (data: any) => {
       setSearchCollapseIsOpened(true);
     },
   });
@@ -131,17 +128,14 @@ export default function SearchBar({ searchItem }: Props) {
           </FocusTrap>
         </Box>
         <Box style={{ display: 'flex', width: '100%' }}>
-          <Collapse in={searchCollapseIsOpened} style={{ width: '100%' }}>
-            {searchMutate.data && (
-              <SearchCollapse
-                cocktailsName={searchMutate.data}
-                setSearchCollapseIsOpened={setSearchCollapseIsOpened}
-                loadingCocktail={loadingCocktail}
-                onClick={onClick}
-                searchedText={searchedText}
-              />
-            )}
-          </Collapse>
+          <SearchCollapse
+            cocktailsName={searchMutate.data}
+            searchedText={searchedText}
+            collapseOpenState={[
+              searchCollapseIsOpened,
+              setSearchCollapseIsOpened,
+            ]}
+          />
         </Box>
         {cocktailData && (
           <Modal
