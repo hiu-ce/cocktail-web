@@ -3,7 +3,7 @@ import { ObjectTyped } from 'object-typed';
 import { ResCocktail } from '../../lib/res.types';
 
 interface Props {
-  cocktail: any;
+  cocktail: ResCocktail;
 }
 function CocktailView({ cocktail }: Props) {
   const ingrKeys = ObjectTyped.keys(cocktail).filter(
@@ -11,10 +11,10 @@ function CocktailView({ cocktail }: Props) {
   );
 
   return (
-    <Card shadow="sm" p="lg" radius="md">
+    <Card shadow="md" p="lg" radius="md">
       <Card.Section>
         <Image
-          src="https://www.eatthis.com/wp-content/uploads/sites/4/2019/03/old-fashioned-cocktail.jpg?quality=82&strip=1"
+          src="https://images.velog.io/images/corone_hi/post/637c8322-1b68-47a0-bd2d-e8b06beddce3/image.png"
           height={250}
           alt="Norway"
         />
@@ -32,11 +32,15 @@ function CocktailView({ cocktail }: Props) {
           ))
       )}
 
-      {Object.keys(cocktail.other).map((other) => (
-        <Text key={`cocktail-viwe--other--${other}`}>
-          {other} : {cocktail.other[other]}
-        </Text>
-      ))}
+      {cocktail.other &&
+        Object.keys(cocktail.other).map(
+          (other) =>
+            cocktail.other && (
+              <Text key={`cocktail-viwe--other--${other}`}>
+                {other} : {cocktail.other[other]}
+              </Text>
+            )
+        )}
 
       <Text>믹싱 방법 : {cocktail.recipe}</Text>
 
