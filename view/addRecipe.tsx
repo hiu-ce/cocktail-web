@@ -123,8 +123,8 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
           placeholder="칵테일"
         />
       </Input.Wrapper>
-      <ScrollArea
-        style={{ height: '50vh' }}
+      <ScrollArea.Autosize
+        maxHeight="55vh"
         type="scroll"
         viewportRef={viewport}
         onScrollPositionChange={onScrollPositionChange}
@@ -146,8 +146,8 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
             </div>
           );
         })}
-        <Box style={{ height: '40vh' }} />
-      </ScrollArea>
+        <Box style={{ height: '20vh' }} />
+      </ScrollArea.Autosize>
 
       <Input.Wrapper
         id="input-demo"
