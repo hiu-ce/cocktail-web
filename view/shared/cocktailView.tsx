@@ -1,6 +1,6 @@
 import { Card, Image, Text } from '@mantine/core';
 import { ObjectTyped } from 'object-typed';
-import { ResCocktail } from '../../../lib/res.types';
+import { ResCocktail } from '../../lib/res.types';
 
 interface Props {
   cocktail: any;

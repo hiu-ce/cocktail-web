@@ -15,11 +15,11 @@ import {
   ResIngredientsName,
 } from '../lib/res.types';
 import { IngredientsGroup, IngredientType } from '../lib/types';
-import AddRecipe from './view/addRecipe';
-import Ingredient from './view/ingredient';
-import SearchBar from './view/searchBar';
-import CocktailTitle from './view/title';
-import TodayDrink from './view/todayDrink';
+import AddRecipe from '../view/addRecipe';
+import Ingredient from '../view/ingredient';
+import SearchBar from '../view/searchBar';
+import CocktailTitle from '../view/title';
+import TodayDrink from '../view/todayDrink';
 
 interface Props {
   searchItem: {
