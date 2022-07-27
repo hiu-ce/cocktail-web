@@ -91,10 +91,7 @@ export default function SearchBar({ searchItem }: Props) {
               maxDropdownHeight="30vh"
               limit={searchItem.length}
               value={value}
-              onChange={(value) => {
-                console.log(value);
-                setValue(value);
-              }}
+              onChange={(value) => setValue(value)}
               data={searchItem}
               label="칵테일 검색"
               placeholder="칵테일이나 재료를 검색해보세요"

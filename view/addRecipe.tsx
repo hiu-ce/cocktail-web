@@ -55,9 +55,7 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
   }, []);
 
   useEffect(() => {
-    // console.log(scrollPosition !== prevPosition);
     setIsScrolling(scrollPosition !== prevPosition);
-    // setIsScrolling(false);
     setPrevPosition(scrollPosition);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sec]);
