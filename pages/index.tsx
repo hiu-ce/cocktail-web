@@ -56,18 +56,25 @@ const Home: NextPage = ({
   return (
     <Center>
       <Grid style={{ width: '80vw' }}>
-        <Grid.Col xs={12}>
+        <Grid.Col xs={1}></Grid.Col>
+        <Grid.Col xs={10}>
           <Center>
             <CocktailTitle />
           </Center>
         </Grid.Col>
+        <Grid.Col xs={1}>
+          <Group position="center">
+            <Button onClick={() => setOpened(true)}>Open Modal</Button>
+          </Group>
+        </Grid.Col>
+
         <Grid.Col xs={12} style={{ width: '100%' }}>
           <Center style={{ width: '100%' }}>
             <SearchBar searchItem={searchItem} />
           </Center>
         </Grid.Col>
         <Grid.Col xs={6}>
-          <TodayDrink />
+          <TodayDrink cocktail={randomCocktail} />
         </Grid.Col>
         <Grid.Col xs={6}>
           <Ingredient ingredientsName={ingredientsName} />
@@ -85,9 +92,6 @@ const Home: NextPage = ({
             />
           </Modal>
         </Grid.Col>
-        <Group position="center">
-          <Button onClick={() => setOpened(true)}>Open Modal</Button>
-        </Group>
       </Grid>
     </Center>
   );
