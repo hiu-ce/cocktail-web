@@ -1,10 +1,8 @@
 import axios from 'axios';
-import getConfig from 'next/config';
 import type { ReqCocktail, ReqIngredients } from '../lib/req.types';
 import type { IngredientType } from '../lib/types';
 
-const { publicRuntimeConfig } = getConfig();
-axios.defaults.baseURL = publicRuntimeConfig.backendUrl;
+axios.defaults.baseURL = process.env.BACKEND_URL;
 
 export async function getCocktails(name: string) {
   const response = await axios.get(`/cocktail/${encodeURIComponent(name)}`);
