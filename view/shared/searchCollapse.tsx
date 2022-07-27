@@ -31,7 +31,7 @@ function SearchCollapse({
 }: Props) {
   return (
     <Paper radius="xs" shadow="md" style={{ width: '100%' }}>
-      <Box style={{ display: 'flex', width: '100%', padding: 15 }}>
+      <Box style={{ display: 'flex', width: '100%' }} p={15}>
         <Title style={{ width: '100%' }} order={5}>
           Searched Cocktails : {searchedText}
         </Title>
@@ -41,13 +41,13 @@ function SearchCollapse({
           </ActionIcon>
         </Group>
       </Box>
-      <Box style={{ padding: 15, paddingTop: 0 }}>
+      <Box p={15} pt={0}>
         {cocktailsName.map((item, index) => (
           <Button
             leftIcon={<GlassFull size={20} />}
             variant="light"
             radius="xs"
-            style={{ marginRight: 5 }}
+            m={5}
             key={`searched--${item}--${index}`}
             value={item.cocktail_name}
             loading={item.cocktail_name === loadingCocktail}

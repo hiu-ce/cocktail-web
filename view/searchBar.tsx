@@ -106,7 +106,7 @@ export default function SearchBar({ searchItem }: Props) {
                 <>
                   <ActionIcon
                     size="sm"
-                    style={{ marginRight: 10 }}
+                    mr={10}
                     onClick={() => {
                       setValue('');
                       handlers.toggle();

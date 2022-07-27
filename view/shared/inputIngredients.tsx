@@ -102,13 +102,6 @@ export default function InputIngredients({
                   {value}
                 </Chip>
               ))}
-              {/* </Chip.Group>
-            <Chip.Group
-              sx={{ marginTop: 10 }}
-              multiple
-              value={includeIngr}
-              onChange={setIncludeIngr}
-            > */}
               {includeIngr
                 .filter((x) => !values.includes(x))
                 .map((value, index) => (

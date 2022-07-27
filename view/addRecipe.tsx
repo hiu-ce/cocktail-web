@@ -164,7 +164,7 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
           placeholder="ex) 재료를 모두 넣어 빌드한다"
         />
       </Input.Wrapper>
-      <Group position="right" style={{ marginTop: 10 }}>
+      <Group position="right" mt={10}>
         <Button
           disabled={error}
           type="submit"
