@@ -6,10 +6,8 @@ interface Props {
   cocktail: any;
 }
 function CocktailView({ cocktail }: Props) {
-  console.log(
-    Object.keys(cocktail).filter(
-      (key) => key !== 'cocktail_name' && key !== 'recipe'
-    )
+  const ingrKeys = ObjectTyped.keys(cocktail).filter(
+    (key) => key !== 'cocktail_name' && key !== 'recipe' && key !== 'other'
   );
 
   return (
@@ -21,20 +19,26 @@ function CocktailView({ cocktail }: Props) {
           alt="Norway"
         />
       </Card.Section>
-      <Text weight={600} size={20}>
+      <Text weight={600} size={20} my={15}>
         {cocktail.cocktail_name}
       </Text>
-      {ObjectTyped.keys(cocktail)
-        .filter((key) => key !== 'cocktail_name' && key !== 'recipe')
-        .map(
-          (key) =>
-            cocktail[key] && //////fix!!!!!!
-            Object.keys(cocktail[key]).map((ingredient) => (
-              <Text key={`cocktail-view--${String(key)}--${ingredient}`}>
-                {ingredient}
-              </Text>
-            ))
-        )}
+      {ingrKeys.map(
+        (key) =>
+          cocktail[key] && //////fix!!!!!!
+          Object.keys(cocktail[key]).map((ingredient) => (
+            <Text key={`cocktail-view--${String(key)}--${ingredient}`}>
+              {ingredient} : {cocktail[key][ingredient]} ml
+            </Text>
+          ))
+      )}
+
+      {Object.keys(cocktail.other).map((other) => (
+        <Text key={`cocktail-viwe--other--${other}`}>
+          {other} : {cocktail.other[other]}
+        </Text>
+      ))}
+
+      <Text>믹싱 방법 : {cocktail.recipe}</Text>
 
       {/* {JSON.stringify(cocktail)} */}
     </Card>
