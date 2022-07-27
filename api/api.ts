@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type { ReqCocktail, ReqIngredients } from '../lib/req.types';
 import type { IngredientType } from '../lib/types';
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export async function getCocktails(name: string) {
   const response = await axios.get(`/cocktail/${encodeURIComponent(name)}`);
