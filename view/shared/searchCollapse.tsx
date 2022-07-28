@@ -4,6 +4,7 @@ import {
   Button,
   Collapse,
   Group,
+  LoadingOverlay,
   Modal,
   Paper,
   Skeleton,
@@ -47,9 +48,13 @@ function SearchCollapse({
   }
 
   return (
-    <Collapse in={searchCollapseIsOpened} style={{ width: '100%' }}>
+    <Collapse
+      in={searchCollapseIsOpened}
+      style={{ width: '100%' }}
+      transitionDuration={400}
+    >
       <Paper radius="xs" shadow="md" style={{ width: '100%' }}>
-        <Box style={{ display: 'flex', width: '100%' }} p={15}>
+        <Box style={{ display: 'flex' }} p="md" pb="xs">
           <Title style={{ width: '100%' }} order={5}>
             Searched Cocktails : {searchedText}
           </Title>
@@ -59,27 +64,26 @@ function SearchCollapse({
             </ActionIcon>
           </Group>
         </Box>
-        <Box p={15} pt={0}>
-          <Skeleton visible={!cocktailsName}>
-            <Box style={{ minHeight: 46 }}>
-              {cocktailsName &&
-                cocktailsName.map((item, index) => (
-                  <Button
-                    leftIcon={<GlassFull size={20} />}
-                    variant="light"
-                    radius="xs"
-                    m={5}
-                    key={`searched--${item}--${index}`}
-                    value={item.cocktail_name}
-                    loading={item.cocktail_name === loadingCocktail}
-                    loaderProps={{ size: 20 }}
-                    onClick={() => onClick(item.cocktail_name)}
-                  >
-                    {item.cocktail_name}
-                  </Button>
-                ))}
-            </Box>
-          </Skeleton>
+        <Box p="md" pt={0}>
+          <Box style={{ minHeight: 46, position: 'relative' }}>
+            <LoadingOverlay transitionDuration={600} visible={!cocktailsName} />
+            {cocktailsName &&
+              cocktailsName.map((item, index) => (
+                <Button
+                  leftIcon={<GlassFull size={20} />}
+                  variant="light"
+                  radius="xs"
+                  m={5}
+                  key={`searched--${item}--${index}`}
+                  value={item.cocktail_name}
+                  loading={item.cocktail_name === loadingCocktail}
+                  loaderProps={{ size: 20 }}
+                  onClick={() => onClick(item.cocktail_name)}
+                >
+                  {item.cocktail_name}
+                </Button>
+              ))}
+          </Box>
         </Box>
       </Paper>
       {cocktailData && (

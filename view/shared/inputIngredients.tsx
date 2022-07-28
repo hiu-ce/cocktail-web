@@ -88,8 +88,8 @@ export default function InputIngredients({
     <div ref={ref}>
       <Paper
         shadow="xs"
-        p={20}
-        my={10}
+        p="xl"
+        my="sm"
         sx={(theme: any) => ({
           backgroundColor: theme.colors.gray[0],
         })}

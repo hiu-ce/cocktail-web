@@ -74,10 +74,10 @@ export default function SearchBar({ searchItem }: Props) {
                 </>
               }
               transition="scale-y"
-              transitionDuration={200}
+              transitionDuration={300}
               transitionTimingFunction="ease"
               dropdownComponent="div"
-              maxDropdownHeight="30vh"
+              maxDropdownHeight="45vh"
               limit={searchItem.length}
               value={value}
               onChange={(value) => setValue(value)}

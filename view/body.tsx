@@ -1,7 +1,16 @@
-import { Box, Grid, Text } from '@mantine/core';
+import {
+  Box,
+  Collapse,
+  Divider,
+  Grid,
+  Loader,
+  Text,
+  Transition,
+} from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
 import { ObjectTyped } from 'object-typed';
 import { useEffect, useState } from 'react';
+import { ChevronDown } from 'tabler-icons-react';
 import { searchCocktails } from '../api/api';
 import { ReqSearch } from '../lib/req.types';
 import { ResCocktail } from '../lib/res.types';
@@ -22,11 +31,13 @@ function Body({ cocktail, ingredientsName }: Props) {
     other: [],
   });
   const [isOpened, setIsOpened] = useState(false);
+  const [isDividerOpened, setIsDividerOpened] = useState(false);
 
   const ingredientsMutate = useMutation(searchCocktails, {
     onSuccess: (data) => {
       console.log(data);
       setIsOpened(true);
+      setIsDividerOpened(true);
     },
   });
 
@@ -35,7 +46,9 @@ function Body({ cocktail, ingredientsName }: Props) {
     ObjectTyped.entries(selectIngrState).forEach(
       ([key, value]) => !!value.length && (param[key] = `${value}`)
     );
-    if (Object.keys(param).length) ingredientsMutate.mutate(param);
+    if (Object.keys(param).length) {
+      ingredientsMutate.mutate(param);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectIngrState]);
 
@@ -47,6 +60,43 @@ function Body({ cocktail, ingredientsName }: Props) {
         </Text>
         <CocktailView cocktail={cocktail} />
         <Box my="md">
+          <Collapse
+            in={
+              !isOpened &&
+              (ingredientsMutate.isLoading || ingredientsMutate.isSuccess)
+            }
+            transitionDuration={isDividerOpened ? 600 : 300}
+            style={{ height: 25 }}
+          >
+            <Divider
+              style={{ height: 23 }}
+              py={1}
+              label={
+                <>
+                  {ingredientsMutate.isLoading ? (
+                    <Loader color="dark" size={12} />
+                  ) : (
+                    <ChevronDown size={12} />
+                  )}
+                  <Box ml="xs" my={0}>
+                    <Text my={0}> Search results</Text>
+                  </Box>
+                </>
+              }
+              labelPosition="center"
+              labelProps={{
+                style: {
+                  cursor: 'pointer',
+                  marginY: 0,
+                },
+                onClick: () => {
+                  console.log('click');
+                  setIsOpened(true);
+                },
+              }}
+            />
+          </Collapse>
+
           <SearchCollapse
             cocktailsName={ingredientsMutate.data}
             searchedText="Result"
