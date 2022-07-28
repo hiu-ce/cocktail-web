@@ -3,7 +3,7 @@ import { ObjectTyped } from 'object-typed';
 import { ResCocktail } from '../../lib/res.types';
 
 interface Props {
-  cocktail: ResCocktail;
+  cocktail: any;
 }
 function CocktailView({ cocktail }: Props) {
   const ingrKeys = ObjectTyped.keys(cocktail).filter(
