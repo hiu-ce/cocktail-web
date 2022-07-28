@@ -2,22 +2,17 @@ import {
   ActionIcon,
   Autocomplete,
   Box,
-  Button,
-  Collapse,
   FocusTrap,
   Modal,
   Stack,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useMutation } from '@tanstack/react-query';
-import { ObjectTyped } from 'object-typed';
-import { useEffect } from 'react';
-import { MouseEventHandler, useState } from 'react';
-import { ChevronsDown, PlaylistX, Search, X } from 'tabler-icons-react';
+import { useState } from 'react';
+import { ChevronsDown, PlaylistX, Search } from 'tabler-icons-react';
 import { getCocktails, searchCocktails } from '../api/api';
-import { ReqIngredient } from '../lib/req.types';
 import { ResCocktail } from '../lib/res.types';
-import { IngredientType, SearchItem, SearchItems } from '../lib/types';
+import { SearchItem, SearchItems } from '../lib/types';
 import CocktailView from './shared/cocktailView';
 import SearchCollapse from './shared/searchCollapse';
 
@@ -29,21 +24,19 @@ export default function SearchBar({ searchItem }: Props) {
   const [value, setValue] = useState('');
   const [searchedText, setSearchedText] = useState('');
   const [searchCollapseIsOpened, setSearchCollapseIsOpened] = useState(false);
-  const [loadingCocktail, setLoadingCocktail] = useState('');
   const [cocktailData, setCocktailData] = useState<ResCocktail>();
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   const [active, handlers] = useDisclosure(false);
 
   const searchMutate = useMutation(searchCocktails, {
-    onSuccess: (data: any) => {
+    onSuccess: () => {
       setSearchCollapseIsOpened(true);
     },
   });
 
   const cocktailMutate = useMutation(getCocktails, {
     onSuccess: (data) => {
-      setLoadingCocktail('');
       setCocktailData(data);
       setIsModalOpened(true);
     },
@@ -61,7 +54,6 @@ export default function SearchBar({ searchItem }: Props) {
   }
 
   function onClick(cocktail_name: string) {
-    setLoadingCocktail(cocktail_name);
     cocktailMutate.mutate(cocktail_name);
   }
 

@@ -80,7 +80,7 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
   }, [cocktailName, ingredientValue, recipe]);
 
   const postCocktail = useMutation(createCocktail, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       updateNotification({
         id: 'post-cocktail',
         color: 'teal',
@@ -91,7 +91,7 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
       });
       setOpened(false);
     },
-    onError: (data) => {
+    onError: () => {
       updateNotification({
         id: 'post-cocktail',
         color: 'red',

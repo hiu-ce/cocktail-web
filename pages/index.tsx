@@ -6,19 +6,10 @@ import type {
 } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import styles from '../styles/Home.module.css';
 import { getCocktailNames, getCocktails, getIngredientNames } from '../api/api';
 import { ingredientType } from '../lib/constant';
-import {
-  ResCocktail,
-  ResCocktailsName,
-  ResIngredientsName,
-} from '../lib/res.types';
-import {
-  IngredientsGroup,
-  IngredientType,
-  SelectSearchItems,
-} from '../lib/types';
+import { ResCocktailsName, ResIngredientsName } from '../lib/res.types';
+import { IngredientsGroup } from '../lib/types';
 import AddRecipe from '../view/addRecipe';
 import SearchBar from '../view/searchBar';
 import CocktailTitle from '../view/title';
@@ -92,7 +83,7 @@ const date = () => {
   return `${getDate}`;
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const ingreGroupName: string[] = ['Base', 'Liquor', 'Juice', 'Other'];
   const cocktailsData: ResCocktailsName = await getCocktailNames();
   const cocktailsName = cocktailsData.map((d) => ({

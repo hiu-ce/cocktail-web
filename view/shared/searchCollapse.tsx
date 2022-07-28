@@ -6,12 +6,12 @@ import {
   Group,
   Modal,
   Paper,
-  Stack,
+  Skeleton,
   Title,
 } from '@mantine/core';
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { ChevronsUp, FoldUp, GlassFull } from 'tabler-icons-react';
+import { ChevronsUp, GlassFull } from 'tabler-icons-react';
 import { getCocktails } from '../../api/api';
 import { ResCocktail, ResCocktailsName } from '../../lib/res.types';
 import CocktailView from './cocktailView';
@@ -60,22 +60,26 @@ function SearchCollapse({
           </Group>
         </Box>
         <Box p={15} pt={0}>
-          {cocktailsName &&
-            cocktailsName.map((item, index) => (
-              <Button
-                leftIcon={<GlassFull size={20} />}
-                variant="light"
-                radius="xs"
-                m={5}
-                key={`searched--${item}--${index}`}
-                value={item.cocktail_name}
-                loading={item.cocktail_name === loadingCocktail}
-                loaderProps={{ size: 20 }}
-                onClick={() => onClick(item.cocktail_name)}
-              >
-                {item.cocktail_name}
-              </Button>
-            ))}
+          <Skeleton visible={!cocktailsName}>
+            <Box style={{ minHeight: 46 }}>
+              {cocktailsName &&
+                cocktailsName.map((item, index) => (
+                  <Button
+                    leftIcon={<GlassFull size={20} />}
+                    variant="light"
+                    radius="xs"
+                    m={5}
+                    key={`searched--${item}--${index}`}
+                    value={item.cocktail_name}
+                    loading={item.cocktail_name === loadingCocktail}
+                    loaderProps={{ size: 20 }}
+                    onClick={() => onClick(item.cocktail_name)}
+                  >
+                    {item.cocktail_name}
+                  </Button>
+                ))}
+            </Box>
+          </Skeleton>
         </Box>
       </Paper>
       {cocktailData && (

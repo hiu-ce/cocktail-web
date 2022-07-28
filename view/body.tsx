@@ -31,11 +31,12 @@ function Body({ cocktail, ingredientsName }: Props) {
   });
 
   useEffect(() => {
-    let param: Partial<ReqSearch> = {};
+    const param: Partial<ReqSearch> = {};
     ObjectTyped.entries(selectIngrState).forEach(
       ([key, value]) => !!value.length && (param[key] = `${value}`)
     );
     if (Object.keys(param).length) ingredientsMutate.mutate(param);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectIngrState]);
 
   return (
