@@ -4,6 +4,7 @@ import {
   Box,
   FocusTrap,
   Modal,
+  ScrollArea,
   Stack,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -76,7 +77,7 @@ export default function SearchBar({ searchItem }: Props) {
               transition="scale-y"
               transitionDuration={300}
               transitionTimingFunction="ease"
-              dropdownComponent="div"
+              dropdownComponent={ScrollArea}
               maxDropdownHeight="45vh"
               limit={searchItem.length}
               value={value}
@@ -97,17 +98,18 @@ export default function SearchBar({ searchItem }: Props) {
                       setValue('');
                       handlers.toggle();
                     }}
+                    disabled={!value}
                   >
-                    <PlaylistX />
+                    <PlaylistX strokeWidth={1} />
                   </ActionIcon>
                   {searchMutate.data && !searchCollapseIsOpened && (
                     <ActionIcon onClick={() => setSearchCollapseIsOpened(true)}>
-                      <ChevronsDown />
+                      <ChevronsDown strokeWidth={1} />
                     </ActionIcon>
                   )}
                 </>
               }
-              onItemSubmit={(item: any) => {
+              onItemSubmit={(item: SearchItem) => {
                 setItem(item);
                 findItem(item);
               }}
@@ -129,16 +131,14 @@ export default function SearchBar({ searchItem }: Props) {
             ]}
           />
         </Box>
-        {cocktailData && (
-          <Modal
-            centered
-            opened={isModalOpened}
-            onClose={() => setIsModalOpened(false)}
-            title={cocktailData.cocktail_name}
-          >
-            <CocktailView cocktail={cocktailData} />
-          </Modal>
-        )}
+        <Modal
+          centered
+          opened={isModalOpened}
+          onClose={() => setIsModalOpened(false)}
+          title={cocktailData?.cocktail_name}
+        >
+          {cocktailData && <CocktailView cocktail={cocktailData} />}
+        </Modal>
       </Stack>
     </>
   );

@@ -1,4 +1,4 @@
-import { Button, Center, Grid, Group, Modal } from '@mantine/core';
+import { Button, Center, Grid, Group, Modal, ScrollArea } from '@mantine/core';
 import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -33,40 +33,45 @@ const Home: NextPage = ({
   }, [opened]);
 
   return (
-    <Center>
-      <Grid style={{ width: '80vw' }}>
-        <Grid.Col xs={1}></Grid.Col>
-        <Grid.Col xs={10}>
-          <Center>
-            <CocktailTitle />
-          </Center>
-        </Grid.Col>
-        <Grid.Col xs={1}>
-          <Group position="center">
-            <Button onClick={() => setOpened(true)}>Open Modal</Button>
-          </Group>
-        </Grid.Col>
+    <ScrollArea style={{ height: '100vh', overflow: 'hidden' }}>
+      <Center>
+        <Grid style={{ width: '80vw' }}>
+          <Grid.Col xs={1}></Grid.Col>
+          <Grid.Col xs={10}>
+            <Center>
+              <CocktailTitle />
+            </Center>
+          </Grid.Col>
+          <Grid.Col xs={1}>
+            <Group position="center" align="center" style={{ height: '100%' }}>
+              <Button onClick={() => setOpened(true)}>Add Recipe</Button>
+            </Group>
+          </Grid.Col>
 
-        <Grid.Col xs={12} style={{ width: '100%' }}>
-          <Center style={{ width: '100%' }}>
-            <SearchBar searchItem={searchItem} />
-          </Center>
-        </Grid.Col>
-        <Grid.Col xs={12}>
-          <Body cocktail={randomCocktail} ingredientsName={ingredientsName} />
-        </Grid.Col>
-      </Grid>
-      <Modal
-        centered
-        opened={opened}
-        onClose={() => setOpened(false)}
-        title="Add cocktail recipe"
-        size="lg"
-        style={{ overflow: 'hidden' }}
-      >
-        <AddRecipe setOpened={setOpened} ingredientsGroup={ingredientsGroup} />
-      </Modal>
-    </Center>
+          <Grid.Col xs={12} style={{ width: '100%' }}>
+            <Center style={{ width: '100%' }}>
+              <SearchBar searchItem={searchItem} />
+            </Center>
+          </Grid.Col>
+          <Grid.Col xs={12}>
+            <Body cocktail={randomCocktail} ingredientsName={ingredientsName} />
+          </Grid.Col>
+        </Grid>
+        <Modal
+          centered
+          opened={opened}
+          onClose={() => setOpened(false)}
+          title="Add cocktail recipe"
+          size="lg"
+          style={{ overflow: 'hidden' }}
+        >
+          <AddRecipe
+            setOpened={setOpened}
+            ingredientsGroup={ingredientsGroup}
+          />
+        </Modal>
+      </Center>
+    </ScrollArea>
   );
 };
 

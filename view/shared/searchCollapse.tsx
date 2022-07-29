@@ -7,7 +7,6 @@ import {
   LoadingOverlay,
   Modal,
   Paper,
-  Skeleton,
   Title,
 } from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
@@ -25,8 +24,6 @@ interface Props {
 function SearchCollapse({
   cocktailsName,
   collapseOpenState,
-  // loadingCocktail,
-  // onClick,
   searchedText,
 }: Props) {
   const [searchCollapseIsOpened, setSearchCollapseIsOpened] = collapseOpenState;
@@ -66,7 +63,7 @@ function SearchCollapse({
         </Box>
         <Box p="md" pt={0}>
           <Box style={{ minHeight: 46, position: 'relative' }}>
-            <LoadingOverlay transitionDuration={600} visible={!cocktailsName} />
+            <LoadingOverlay transitionDuration={300} visible={!cocktailsName} />
             {cocktailsName &&
               cocktailsName.map((item, index) => (
                 <Button
@@ -86,16 +83,14 @@ function SearchCollapse({
           </Box>
         </Box>
       </Paper>
-      {cocktailData && (
-        <Modal
-          centered
-          opened={isModalOpened}
-          onClose={() => setIsModalOpened(false)}
-          title={cocktailData.cocktail_name}
-        >
-          <CocktailView cocktail={cocktailData} />
-        </Modal>
-      )}
+      <Modal
+        centered
+        opened={isModalOpened}
+        onClose={() => setIsModalOpened(false)}
+        title={cocktailData?.cocktail_name}
+      >
+        {cocktailData && <CocktailView cocktail={cocktailData} />}
+      </Modal>
     </Collapse>
   );
 }

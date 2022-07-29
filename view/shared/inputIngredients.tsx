@@ -86,14 +86,7 @@ export default function InputIngredients({
 
   return (
     <div ref={ref}>
-      <Paper
-        shadow="xs"
-        p="xl"
-        my="sm"
-        sx={(theme: any) => ({
-          backgroundColor: theme.colors.gray[0],
-        })}
-      >
+      <Paper shadow="xs" p="xl" my="sm">
         <Grid>
           <Grid.Col span={10}>
             <Chip.Group multiple value={includeIngr} onChange={setIncludeIngr}>

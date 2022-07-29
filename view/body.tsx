@@ -1,19 +1,13 @@
-import {
-  Box,
-  Collapse,
-  Divider,
-  Grid,
-  Loader,
-  Text,
-  Transition,
-} from '@mantine/core';
+import { Box, Collapse, Divider, Grid, Loader, Text } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { ObjectTyped } from 'object-typed';
 import { useEffect, useState } from 'react';
-import { ChevronDown } from 'tabler-icons-react';
+import { ChevronDown, X } from 'tabler-icons-react';
 import { searchCocktails } from '../api/api';
 import { ReqSearch } from '../lib/req.types';
-import { ResCocktail } from '../lib/res.types';
+import { ResCocktail, ResCocktailsName } from '../lib/res.types';
 import { IngredientsName, SelectSearchItems } from '../lib/types';
 import CocktailView from './shared/cocktailView';
 import IngredientSelector from './shared/ingredientSelector';
@@ -22,6 +16,12 @@ interface Props {
   cocktail: ResCocktail;
   ingredientsName: IngredientsName;
 }
+
+type ResSearchError = AxiosError<{
+  data: ResCocktailsName;
+  error_message: string;
+  error_code: number;
+}>;
 
 function Body({ cocktail, ingredientsName }: Props) {
   const [selectIngrState, setSelectIngrState] = useState<SelectSearchItems>({
@@ -39,7 +39,24 @@ function Body({ cocktail, ingredientsName }: Props) {
       setIsOpened(true);
       setIsDividerOpened(true);
     },
+    onError: (error: ResSearchError) => {
+      setIsOpened(true);
+      setIsDividerOpened(true);
+      if (error.response?.data) {
+        showNotification({
+          id: 'search-ingredients',
+          color: 'bright-pink',
+          title: 'No result for search',
+          message: error.response.data.error_message,
+          icon: <X />,
+          autoClose: 5000,
+        });
+      }
+    },
   });
+
+  const data =
+    ingredientsMutate.data || ingredientsMutate.error?.response?.data.data;
 
   useEffect(() => {
     const param: Partial<ReqSearch> = {};
@@ -61,10 +78,7 @@ function Body({ cocktail, ingredientsName }: Props) {
         <CocktailView cocktail={cocktail} />
         <Box my="md">
           <Collapse
-            in={
-              !isOpened &&
-              (ingredientsMutate.isLoading || ingredientsMutate.isSuccess)
-            }
+            in={!isOpened && (data || ingredientsMutate.isLoading)}
             transitionDuration={isDividerOpened ? 600 : 300}
             style={{ height: 25 }}
           >
@@ -74,7 +88,7 @@ function Body({ cocktail, ingredientsName }: Props) {
               label={
                 <>
                   {ingredientsMutate.isLoading ? (
-                    <Loader color="dark" size={12} />
+                    <Loader size={12} />
                   ) : (
                     <ChevronDown size={12} />
                   )}
@@ -98,7 +112,7 @@ function Body({ cocktail, ingredientsName }: Props) {
           </Collapse>
 
           <SearchCollapse
-            cocktailsName={ingredientsMutate.data}
+            cocktailsName={data}
             searchedText="Result"
             collapseOpenState={[isOpened, setIsOpened]}
           />

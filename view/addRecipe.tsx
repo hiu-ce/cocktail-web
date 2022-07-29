@@ -165,7 +165,6 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
       <Group position="right" mt={10}>
         <Button
           disabled={error}
-          type="submit"
           onClick={() => {
             showNotification({
               id: 'post-cocktail',
