@@ -81,6 +81,18 @@ function Body({ cocktail, ingredientsName }: Props) {
           Recommend Today Drink
         </Text>
         <CocktailView cocktail={cocktail} />
+      </Grid.Col>
+      <Grid.Col xs={6}>
+        {ingredientsName
+          .filter((data) => data?.[0].groupkey !== 'other')
+          .map((data, index: number) => (
+            <IngredientSelector
+              ingredients={data}
+              state={[selectIngrState, setSelectIngrState]}
+              ingrName={{ name: data[0].group, key: data[0].groupkey }}
+              key={`ingredient--${data[0].group}--${index}`}
+            />
+          ))}
         <Box my="md">
           <Collapse
             in={!isOpened && (data || ingredientsMutate.isLoading)}
@@ -118,22 +130,10 @@ function Body({ cocktail, ingredientsName }: Props) {
 
           <SearchCollapse
             cocktailsName={data}
-            searchedText="선택한 재료"
+            searchedText="선택한 재료들"
             collapseOpenState={[isOpened, setIsOpened]}
           />
         </Box>
-      </Grid.Col>
-      <Grid.Col xs={6}>
-        {ingredientsName
-          .filter((data) => data?.[0].groupkey !== 'other')
-          .map((data, index: number) => (
-            <IngredientSelector
-              ingredients={data}
-              state={[selectIngrState, setSelectIngrState]}
-              ingrName={{ name: data[0].group, key: data[0].groupkey }}
-              key={`ingredient--${data[0].group}--${index}`}
-            />
-          ))}
       </Grid.Col>
     </Grid>
   );

@@ -35,7 +35,7 @@ const Home: NextPage = ({
   return (
     <ScrollArea style={{ height: '100vh', overflow: 'hidden' }}>
       <Center>
-        <Grid style={{ width: '80vw', maxWidth: 1000 }}>
+        <Grid style={{ width: '80vw', maxWidth: 1000 }} mb={60}>
           <Grid.Col xs={1}></Grid.Col>
           <Grid.Col xs={10}>
             <Center>

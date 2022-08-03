@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export function usePrevState(state: any) {
+export function usePrevState(state: unknown) {
   const ref = useRef(state);
   useEffect(() => {
     ref.current = state;
@@ -17,4 +17,9 @@ export function josa(word: string) {
   if (uni < 44032 || uni > 55203) return null;
 
   return (uni - 44032) % 28 != 0;
+}
+
+export function mlOzCalc(ml: number) {
+  const oz = ml / 29.574;
+  return Math.round(oz * 10) / 10;
 }
