@@ -40,34 +40,22 @@ export default function InputIngredients({
   setIngredientValue,
   scrollTo,
   componentIndex,
-  isScrolling,
 }: InputIngredientsProps) {
   const values = Object.values(ingredient)[0];
   const name: IngredientType = ObjectTyped.keys(ingredient)[0];
   const [opened, setOpened] = useState(false);
-  const [includeIngr, setIncludeIngr] = useState<string[]>([]);
-  const [amount, setAmount] = useState<ResIngredient>({});
+  const [includeIngr, setIncludeIngr] = useState<ResIngredient[]>([]);
   const [newIngr, setNewIngr] = useState('');
   const focusTrapRef = useFocusTrap();
   const handlers = useRef<NumberInputHandlers>();
-  const { ref, focused } = useFocusWithin();
+  const { ref, focused } = useFocusWithin({});
 
   useEffect(() => {
-    const obj: ResIngredient = {};
-    setAmount({
-      ...includeIngr.reduce(function (target, key) {
-        if (!Object.keys(amount).includes(key)) target[key] = 0;
-        else target[key] = amount[key];
-        return target;
-      }, obj),
-    });
+    const ingr = {};
+    Object.assign(ingr, ...includeIngr);
+    setIngredientValue({ ...ingredientValue, [name]: ingr });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [includeIngr]);
-
-  useEffect(() => {
-    setIngredientValue({ ...ingredientValue, [name]: amount });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [amount]);
 
   useEffect(() => {
     if (focused) scrollTo(componentIndex);
@@ -75,7 +63,7 @@ export default function InputIngredients({
   }, [focused]);
 
   function onSubmit() {
-    setIncludeIngr([...includeIngr, newIngr]);
+    setIncludeIngr([...includeIngr, { [newIngr]: 0 }]);
     setNewIngr('');
     setOpened(false);
   }
@@ -84,26 +72,52 @@ export default function InputIngredients({
     e.target.select();
   }
 
+  function getIngrName(obj: ResIngredient) {
+    return Object.keys(obj)[0];
+  }
+
+  function getIngrAmount(obj: ResIngredient) {
+    return Object.values(obj)[0];
+  }
+
+  function getIngrNameArr(obj: ResIngredient[]) {
+    return obj.map((item) => getIngrName(item));
+  }
+
   return (
     <div ref={ref}>
-      <Paper shadow="xs" p="xl" my="sm">
+      <Paper shadow="xs" p="xl">
         <Grid>
           <Grid.Col span={10}>
-            <Chip.Group multiple value={includeIngr} onChange={setIncludeIngr}>
+            <Chip.Group
+              multiple
+              value={getIngrNameArr(includeIngr)}
+              onChange={(value) => {
+                const keys = getIngrNameArr(includeIngr);
+                const t = value.map((key) => {
+                  return {
+                    [key]: includeIngr[keys.indexOf(key)]
+                      ? getIngrAmount(includeIngr[keys.indexOf(key)])
+                      : 0,
+                  };
+                });
+                setIncludeIngr(t);
+              }}
+            >
               {values.map((value, index) => (
                 <Chip value={value} key={`addRecipe--${name}--${index}`}>
                   {value}
                 </Chip>
               ))}
               {includeIngr
-                .filter((x) => !values.includes(x))
-                .map((value, index) => (
+                .filter((x) => !values.includes(getIngrName(x)))
+                .map((item, index) => (
                   <Chip
                     variant="filled"
-                    value={value}
+                    value={getIngrName(item)}
                     key={`addRecipe--${name}--${index}`}
                   >
-                    {value}
+                    {getIngrName(item)}
                   </Chip>
                 ))}
             </Chip.Group>
@@ -114,14 +128,14 @@ export default function InputIngredients({
               onClose={() => setOpened(false)}
               width={260}
               position="bottom"
-              withArrow
             >
               <Popover.Target>
                 <Button onClick={() => setOpened((o) => !o)} size="xs">
                   +
                 </Button>
               </Popover.Target>
-              <Popover.Dropdown>
+
+              <Popover.Dropdown p={0}>
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -139,21 +153,26 @@ export default function InputIngredients({
                           <GlassFull size={16} />{' '}
                         </ThemeIcon>
                       }
+                      radius={0}
+                      ref={opened ? focusTrapRef : null}
                       placeholder={`New ${name}`}
                       variant="filled"
                       value={newIngr}
-                      onChange={(event: any) =>
+                      onChange={(event) =>
                         setNewIngr(event.currentTarget.value)
                       }
                       styles={{ rightSection: { pointerEvents: 'none' } }}
                     />
-                    <Button type="submit">Add</Button>
+                    <Button radius={0} type="submit">
+                      Add
+                    </Button>
                   </Box>
                 </form>
               </Popover.Dropdown>
             </Popover>
           </Grid.Col>
-          <Grid.Col span={12}>
+
+          <Grid.Col span={12} py={0}>
             <Collapse in={!!includeIngr.length} sx={{ width: '100%' }}>
               <Divider
                 my="sm"
@@ -162,94 +181,105 @@ export default function InputIngredients({
               />
               <Table striped highlightOnHover>
                 <tbody>
-                  {[...includeIngr].reverse().map((ingr, index) => (
-                    <tr key={`addRecipe--${name}--table--${ingr}--${index}`}>
-                      <td style={{ width: '40%' }}>
-                        <Button
-                          size="xs"
-                          leftIcon={<Trash />}
-                          color="gray"
-                          onClick={() => {
-                            setIncludeIngr(
-                              includeIngr.filter((x) => x !== ingr)
-                            );
-                          }}
-                        >
-                          {ingr}
-                        </Button>
-                      </td>
-                      <td style={{ width: '60%' }}>
-                        {name === 'other' ? (
-                          <TextInput
-                            ref={index === 0 ? focusTrapRef : null}
-                            value={
-                              amount[ingr] !== undefined ? amount[ingr] : ''
-                            }
-                            onChange={(e) => {
-                              setAmount({
-                                ...amount,
-                                [ingr]: e.target.value,
-                              });
+                  {includeIngr
+                    .map((ingr, index) => (
+                      <tr key={`addRecipe--${name}--table--${ingr}--${index}`}>
+                        <td style={{ width: '40%' }}>
+                          <Button
+                            size="xs"
+                            leftIcon={<Trash />}
+                            color="gray"
+                            onClick={() => {
+                              setIncludeIngr(
+                                includeIngr.filter((x) => x !== ingr)
+                              );
                             }}
-                            onFocus={onFocus}
-                          />
-                        ) : (
-                          <Group spacing={5} style={{}}>
-                            <ActionIcon
-                              size={42}
-                              variant="default"
-                              onClick={() =>
-                                handlers.current && handlers.current.decrement()
+                          >
+                            {getIngrName(ingr)}
+                          </Button>
+                        </td>
+                        <td style={{ width: '60%' }}>
+                          {name === 'other' ? (
+                            <TextInput
+                              ref={focusTrapRef}
+                              value={
+                                getIngrAmount(ingr) !== undefined
+                                  ? getIngrAmount(ingr)
+                                  : ''
                               }
-                            >
-                              -
-                            </ActionIcon>
-
-                            <NumberInput
-                              hideControls
-                              value={+amount[ingr]}
-                              onChange={(val) =>
-                                setAmount({
-                                  ...amount,
-                                  [ingr]: val ? val : 0,
-                                })
+                              onChange={(e) =>
+                                setIncludeIngr(
+                                  includeIngr.map((item, idx) =>
+                                    index === idx
+                                      ? { [getIngrName(item)]: e.target.value }
+                                      : item
+                                  )
+                                )
                               }
                               onFocus={onFocus}
-                              ref={index === 0 ? focusTrapRef : null}
-                              handlersRef={handlers}
-                              min={0}
-                              rightSectionWidth={50}
-                              rightSection={
-                                <Badge
-                                  variant="gradient"
-                                  gradient={{
-                                    from: 'indigo',
-                                    to: 'cyan',
-                                    deg: 60,
-                                  }}
-                                >
-                                  ml
-                                </Badge>
-                              }
-                              styles={{
-                                input: { width: 100, textAlign: 'center' },
-                              }}
                             />
+                          ) : (
+                            <Group spacing={5} style={{}}>
+                              <ActionIcon
+                                size={42}
+                                variant="default"
+                                onClick={() =>
+                                  handlers.current &&
+                                  handlers.current.decrement()
+                                }
+                              >
+                                -
+                              </ActionIcon>
+                              <NumberInput
+                                hideControls
+                                value={+getIngrAmount(ingr)}
+                                onChange={(val) => {
+                                  setIncludeIngr(
+                                    includeIngr.map((item, idx) =>
+                                      index === idx
+                                        ? { [getIngrName(item)]: val ? val : 0 }
+                                        : item
+                                    )
+                                  );
+                                }}
+                                onFocus={onFocus}
+                                ref={focusTrapRef}
+                                handlersRef={handlers}
+                                min={0}
+                                rightSectionWidth={50}
+                                rightSection={
+                                  <Badge
+                                    variant="gradient"
+                                    gradient={{
+                                      from: 'indigo',
+                                      to: 'cyan',
+                                      deg: 60,
+                                    }}
+                                  >
+                                    ml
+                                  </Badge>
+                                }
+                                styles={{
+                                  input: { width: 100, textAlign: 'center' },
+                                }}
+                              />
 
-                            <ActionIcon
-                              size={42}
-                              variant="default"
-                              onClick={() =>
-                                handlers.current && handlers.current.increment()
-                              }
-                            >
-                              +
-                            </ActionIcon>
-                          </Group>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                              <ActionIcon
+                                size={42}
+                                variant="default"
+                                onClick={() =>
+                                  handlers.current &&
+                                  handlers.current.increment()
+                                }
+                              >
+                                +
+                              </ActionIcon>
+                            </Group>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                    .reverse()}
                 </tbody>
               </Table>
             </Collapse>

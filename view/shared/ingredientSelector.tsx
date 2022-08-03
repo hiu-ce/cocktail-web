@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Divider, Paper, Spoiler } from '@mantine/core';
+import { Box, Chip, Divider, Paper, Spoiler } from '@mantine/core';
 import { useElementSize } from '@mantine/hooks';
 import { useCallback } from 'react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
@@ -24,26 +24,21 @@ export default function IngredientSelector({
   }, [value]);
 
   const spoilerButton = useCallback(
-    (text: string) => (
-      <Button component="div" radius="xl" size="xs" mt="xs">
-        {text}
-      </Button>
-    ),
+    (text: string) => <div className="my-box">{text}</div>,
     []
   );
 
   return (
     <Paper shadow="md" p="md" pt={2} my="md">
       <Divider mt={0} mb="md" label={ingrName.name} labelPosition="center" />
-      {/* <ScrollArea.Autosize maxHeight={105}> */}
       <Spoiler
         maxHeight={105}
-        showLabel={spoilerButton('show more')}
-        hideLabel={spoilerButton('hide')}
+        showLabel={spoilerButton('More')}
+        hideLabel={spoilerButton('Hide')}
       >
         <Box ref={ref}>
           <Chip.Group multiple value={value} onChange={setValue}>
-            {ingredients.map((data: any, index) => (
+            {ingredients.map((data, index) => (
               <Chip value={data.value} key={index}>
                 {data.value}
               </Chip>
@@ -51,7 +46,6 @@ export default function IngredientSelector({
           </Chip.Group>
         </Box>
       </Spoiler>
-      {/* </ScrollArea.Autosize> */}
     </Paper>
   );
 }

@@ -49,7 +49,7 @@ function Body({ cocktail, ingredientsName }: Props) {
           title: 'No result for search',
           message: error.response.data.error_message,
           icon: <X />,
-          autoClose: 5000,
+          autoClose: 1500,
         });
       }
     },
@@ -72,7 +72,12 @@ function Body({ cocktail, ingredientsName }: Props) {
   return (
     <Grid>
       <Grid.Col xs={6}>
-        <Text weight={800} size={30}>
+        <Text
+          className="my-text"
+          style={{ fontFamily: 'Fira Sans' }}
+          weight={700}
+          size={30}
+        >
           Recommend Today Drink
         </Text>
         <CocktailView cocktail={cocktail} />
@@ -113,20 +118,22 @@ function Body({ cocktail, ingredientsName }: Props) {
 
           <SearchCollapse
             cocktailsName={data}
-            searchedText="Result"
+            searchedText="선택한 재료"
             collapseOpenState={[isOpened, setIsOpened]}
           />
         </Box>
       </Grid.Col>
       <Grid.Col xs={6}>
-        {ingredientsName.map((data, index: number) => (
-          <IngredientSelector
-            ingredients={data}
-            state={[selectIngrState, setSelectIngrState]}
-            ingrName={{ name: data[0].group, key: data[0].groupkey }}
-            key={`ingredient--${data[0].group}--${index}`}
-          />
-        ))}
+        {ingredientsName
+          .filter((data) => data?.[0].groupkey !== 'other')
+          .map((data, index: number) => (
+            <IngredientSelector
+              ingredients={data}
+              state={[selectIngrState, setSelectIngrState]}
+              ingrName={{ name: data[0].group, key: data[0].groupkey }}
+              key={`ingredient--${data[0].group}--${index}`}
+            />
+          ))}
       </Grid.Col>
     </Grid>
   );

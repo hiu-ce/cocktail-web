@@ -78,6 +78,7 @@ export default function SearchBar({ searchItem }: Props) {
               transitionDuration={300}
               transitionTimingFunction="ease"
               dropdownComponent={ScrollArea}
+              dropdownPosition="bottom"
               maxDropdownHeight="45vh"
               limit={searchItem.length}
               value={value}

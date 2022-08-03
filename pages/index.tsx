@@ -35,7 +35,7 @@ const Home: NextPage = ({
   return (
     <ScrollArea style={{ height: '100vh', overflow: 'hidden' }}>
       <Center>
-        <Grid style={{ width: '80vw' }}>
+        <Grid style={{ width: '80vw', maxWidth: 1000 }}>
           <Grid.Col xs={1}></Grid.Col>
           <Grid.Col xs={10}>
             <Center>
@@ -47,15 +47,19 @@ const Home: NextPage = ({
               <Button onClick={() => setOpened(true)}>Add Recipe</Button>
             </Group>
           </Grid.Col>
-
-          <Grid.Col xs={12} style={{ width: '100%' }}>
-            <Center style={{ width: '100%' }}>
-              <SearchBar searchItem={searchItem} />
-            </Center>
-          </Grid.Col>
-          <Grid.Col xs={12}>
-            <Body cocktail={randomCocktail} ingredientsName={ingredientsName} />
-          </Grid.Col>
+          <main>
+            <Grid.Col xs={12} style={{ width: '100%' }}>
+              <Center style={{ width: '100%' }}>
+                <SearchBar searchItem={searchItem} />
+              </Center>
+            </Grid.Col>
+            <Grid.Col xs={12}>
+              <Body
+                cocktail={randomCocktail}
+                ingredientsName={ingredientsName}
+              />
+            </Grid.Col>
+          </main>
         </Grid>
         <Modal
           centered
@@ -64,6 +68,7 @@ const Home: NextPage = ({
           title="Add cocktail recipe"
           size="lg"
           style={{ overflow: 'hidden' }}
+          trapFocus
         >
           <AddRecipe
             setOpened={setOpened}

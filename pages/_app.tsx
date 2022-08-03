@@ -4,6 +4,7 @@ import { Global, MantineProvider } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import axios from 'axios';
 import { NotificationsProvider } from '@mantine/notifications';
+import '../styles/globals.css';
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ export default function App(props: AppProps) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <MantineProvider
+          withCSSVariables
           withGlobalStyles
           withNormalizeCSS
           theme={{
@@ -47,36 +49,32 @@ export default function App(props: AppProps) {
 
             components: {
               Button: {
-                styles: (theme) => ({
-                  root: {
-                    ':disabled': {
-                      backgroundImage: theme.fn.gradient({
-                        // from: theme.colors.cyan[9],
-                        // to: theme.colors.teal[9],
-                        from: '#0D505C',
-                        to: '#0D505C',
-                      }),
-                    },
-                    // label: {
-                    //   backgroundColor: 'red',
-                    // },
-                  },
-                }),
                 defaultProps: {
-                  variant: 'gradient',
+                  variant: 'outline',
                 },
               },
               Modal: {
+                styles: (theme) => ({
+                  modal: {
+                    backgroundColor: theme.colors.dark[6],
+                  },
+                  header: {
+                    margin: theme.spacing.xs,
+                    marginTop: 0,
+                  },
+                }),
+
                 defaultProps: {
                   transition: 'fade',
                   transitionDuration: 500,
                   transitionTimingFunction: 'ease',
+                  closeOnEscape: false,
                 },
               },
               Paper: {
                 styles: (theme) => ({
                   root: {
-                    backgroundColor: theme.colors.dark[6],
+                    backgroundColor: theme.colors.dark[7],
                   },
                 }),
                 defaultProps: {
@@ -90,10 +88,26 @@ export default function App(props: AppProps) {
                 },
               },
               Card: {
+                styles: (theme) => ({
+                  root: {
+                    backgroundColor: theme.colors.dark[7],
+                  },
+                }),
                 defaultProps: {
                   shadow: 'md',
                   radius: 'md',
                 },
+              },
+              Spoiler: {
+                styles: (theme) => ({
+                  control: {
+                    fontSize: '14px',
+                    WebkitTextFillColor: theme.colors.gray[5],
+                    ':hover': {
+                      textDecoration: 'none',
+                    },
+                  },
+                }),
               },
             },
           }}
@@ -103,14 +117,6 @@ export default function App(props: AppProps) {
               styles={(theme) => ({
                 body: {
                   ...theme.fn.fontStyles(),
-                  // backgroundImage:
-                  //   theme.colorScheme === 'dark'
-                  //     ? theme.fn.gradient({
-                  //         from: '#232526',
-                  //         to: 'cyan',
-                  //         deg: 100,
-                  //       })
-                  //     : theme.white,
                   backgroundColor:
                     theme.colorScheme === 'dark'
                       ? theme.colors.dark[5]
@@ -118,7 +124,7 @@ export default function App(props: AppProps) {
 
                   color:
                     theme.colorScheme === 'dark'
-                      ? theme.colors.gray[5]
+                      ? theme.colors.gray[2]
                       : theme.black,
                   lineHeight: theme.lineHeight,
                 },

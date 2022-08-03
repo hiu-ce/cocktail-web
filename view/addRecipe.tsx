@@ -2,8 +2,8 @@ import {
   Box,
   Button,
   Group,
-  Input,
   ScrollArea,
+  Text,
   Textarea,
   TextInput,
 } from '@mantine/core';
@@ -62,10 +62,11 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
 
   const scrollTo = (index: number) => {
     if (viewport.current) {
+      viewport.current.focus({ preventScroll: true });
       const height = refs.current.map((item) => item.scrollHeight);
       const top = [0];
       height.reduce((a, b) => {
-        top.push(a + 10);
+        top.push(a + 24);
         return a + 10 + b;
       });
       viewport.current.scrollTo({ top: top[index], behavior: 'smooth' });
@@ -105,34 +106,36 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
 
   return (
     <>
-      <Input.Wrapper
-        id="input-demo"
+      <TextInput
         required
         label="Cocktail Name"
         description="칵테일 이름을 입력하세요"
-      >
-        <TextInput
-          data-autofocus
-          value={cocktailName}
-          onChange={(e) => {
-            setCocktailName(e.currentTarget.value);
-          }}
-          id="input-demo"
-          placeholder="칵테일"
-        />
-      </Input.Wrapper>
+        data-autofocus
+        value={cocktailName}
+        onChange={(e) => {
+          setCocktailName(e.currentTarget.value);
+        }}
+        id="input-demo"
+        placeholder="칵테일"
+        inputWrapperOrder={['label', 'error', 'input', 'description']}
+        mb="xs"
+      />
       <ScrollArea.Autosize
         maxHeight="55vh"
         type="scroll"
         viewportRef={viewport}
         onScrollPositionChange={onScrollPositionChange}
       >
-        {ingredientsGroup.map((ingredient, index) => {
-          return (
-            <div
+        <Box mb={150}>
+          {ingredientsGroup.map((ingredient, index) => (
+            <Box
               key={`addRecipe--${index}`}
               ref={(ref: HTMLDivElement) => (refs.current[index] = ref)}
+              my="sm"
             >
+              <Text transform="uppercase" size="lg" weight={700} m="xs">
+                {Object.keys(ingredient)[0]}
+              </Text>
               <InputIngredients
                 ingredient={ingredient}
                 ingredientValue={ingredientValue}
@@ -141,27 +144,23 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
                 componentIndex={index}
                 isScrolling={isScrolling}
               />
-            </div>
-          );
-        })}
-        <Box style={{ height: '20vh' }} />
+            </Box>
+          ))}
+        </Box>
       </ScrollArea.Autosize>
 
-      <Input.Wrapper
-        id="input-demo"
+      <Textarea
         required
         label="제작 방법"
         description="순서, 믹싱 방법 등을 입력하세요"
-      >
-        <Textarea
-          value={recipe}
-          onChange={(event) => setRecipe(event.currentTarget.value)}
-          autosize
-          minRows={2}
-          maxRows={4}
-          placeholder="ex) 재료를 모두 넣어 빌드한다"
-        />
-      </Input.Wrapper>
+        value={recipe}
+        onChange={(event) => setRecipe(event.currentTarget.value)}
+        autosize
+        minRows={2}
+        maxRows={4}
+        placeholder="ex) 재료를 모두 넣어 빌드한다"
+      />
+
       <Group position="right" mt={10}>
         <Button
           disabled={error}

@@ -14,6 +14,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { ChevronsUp, GlassFull } from 'tabler-icons-react';
 import { getCocktails } from '../../api/api';
 import { ResCocktail, ResCocktailsName } from '../../lib/res.types';
+import { josa } from '../../lib/utils';
 import CocktailView from './cocktailView';
 
 interface Props {
@@ -53,7 +54,8 @@ function SearchCollapse({
       <Paper radius="xs" shadow="md" style={{ width: '100%' }}>
         <Box style={{ display: 'flex' }} p="md" pb="xs">
           <Title style={{ width: '100%' }} order={5}>
-            Searched Cocktails : {searchedText}
+            {searchedText}
+            {josa(searchedText) ? '이' : '가'} 포함된 레시피
           </Title>
           <Group position="right">
             <ActionIcon onClick={() => setSearchCollapseIsOpened(false)}>
