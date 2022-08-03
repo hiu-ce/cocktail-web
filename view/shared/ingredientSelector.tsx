@@ -30,7 +30,7 @@ export default function IngredientSelector({
 
   return (
     <Paper shadow="md" p="md" pt={2} my="md">
-      <Divider mt={0} mb="md" label={ingrName.name} labelPosition="center" />
+      <Divider mt="xs" mb="sm" label={ingrName.name} labelPosition="center" />
       <Spoiler
         maxHeight={105}
         showLabel={spoilerButton('More')}
