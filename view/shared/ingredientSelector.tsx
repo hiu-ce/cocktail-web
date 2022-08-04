@@ -1,7 +1,16 @@
-import { Box, Chip, Divider, Paper, Spoiler } from '@mantine/core';
+import {
+  Box,
+  Center,
+  Chip,
+  Divider,
+  Paper,
+  Spoiler,
+  Text,
+} from '@mantine/core';
 import { useElementSize } from '@mantine/hooks';
 import { useCallback } from 'react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { ChevronDown, ChevronUp } from 'tabler-icons-react';
 import { IngredientsNameArr, SelectSearchItems } from '../../lib/types';
 
 interface Props {
@@ -24,7 +33,11 @@ export default function IngredientSelector({
   }, [value]);
 
   const spoilerButton = useCallback(
-    (text: string) => <div className="my-box">{text}</div>,
+    (children: JSX.Element) => (
+      <div className="my-box">
+        <Center style={{ height: '100%' }}>{children}</Center>
+      </div>
+    ),
     []
   );
 
@@ -33,8 +46,22 @@ export default function IngredientSelector({
       <Divider mt="xs" mb="sm" label={ingrName.name} labelPosition="center" />
       <Spoiler
         maxHeight={105}
-        showLabel={spoilerButton('More')}
-        hideLabel={spoilerButton('Hide')}
+        showLabel={spoilerButton(
+          <>
+            <ChevronDown size={18} />
+            <Text ml={3} mr={6}>
+              더보기
+            </Text>
+          </>
+        )}
+        hideLabel={spoilerButton(
+          <>
+            <ChevronUp size={18} />
+            <Text ml={3} mr={6}>
+              접기
+            </Text>
+          </>
+        )}
       >
         <Box ref={ref}>
           <Chip.Group multiple value={value} onChange={setValue}>
