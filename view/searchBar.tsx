@@ -8,19 +8,24 @@ import {
   Stack,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ChevronsDown, PlaylistX, Search } from 'tabler-icons-react';
-import { getCocktails, searchCocktails } from '../api/api';
+import {
+  getCocktails,
+  getProcessedCocktailNames,
+  getProcessedIngredientNames,
+  searchCocktails,
+} from '../api/api';
 import { ResCocktail } from '../lib/res.types';
-import { SearchItem, SearchItems } from '../lib/types';
+import { SearchItem } from '../lib/types';
 import CocktailView from './shared/cocktailView';
 import SearchCollapse from './shared/searchCollapse';
 
-interface Props {
-  searchItem: SearchItems;
-}
-export default function SearchBar({ searchItem }: Props) {
+// interface Props {
+// searchItem: SearchItems;
+// }
+export default function SearchBar() {
   const [item, setItem] = useState<SearchItem | undefined>();
   const [value, setValue] = useState('');
   const [searchedText, setSearchedText] = useState('');
@@ -29,6 +34,27 @@ export default function SearchBar({ searchItem }: Props) {
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   const [active, handlers] = useDisclosure(false);
+
+  // const res = useQueries({
+  //   queries: [
+  //     { queryKey: ['search', 1], queryFn: getCocktailNames },
+  //     { queryKey: ['search', 2], queryFn: () => getIngredientNames() },
+  //   ],
+  // });
+  const cocktailsName = useQuery(['cocktailName'], getProcessedCocktailNames, {
+    // onSuccess: (data) =>
+  });
+
+  const ingredientsName = useQuery(
+    ['ingredientsName'],
+    getProcessedIngredientNames,
+    {}
+  );
+
+  const data = [
+    ...(cocktailsName.data || []),
+    ...(ingredientsName.data?.flat() || []),
+  ];
 
   const searchMutate = useMutation(searchCocktails, {
     onSuccess: () => {
@@ -80,10 +106,10 @@ export default function SearchBar({ searchItem }: Props) {
               dropdownComponent={ScrollArea}
               dropdownPosition="bottom"
               maxDropdownHeight="45vh"
-              limit={searchItem.length}
+              limit={data.length || 1}
               value={value}
               onChange={(value) => setValue(value)}
-              data={searchItem}
+              data={data || [{ value: 'loading...' }]}
               label="칵테일 검색"
               placeholder="칵테일이나 재료를 검색해보세요"
               radius="xs"
@@ -119,6 +145,11 @@ export default function SearchBar({ searchItem }: Props) {
                 handlers.close();
               }}
               style={{ width: '100%' }}
+              styles={{
+                dropdown: {
+                  overflow: 'hidden',
+                },
+              }}
             />
           </FocusTrap>
         </Box>

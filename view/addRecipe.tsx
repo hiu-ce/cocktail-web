@@ -9,20 +9,18 @@ import {
 } from '@mantine/core';
 import { useInterval } from '@mantine/hooks';
 import { showNotification, updateNotification } from '@mantine/notifications';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
 import { Check, X } from 'tabler-icons-react';
-import { createCocktail } from '../api/api';
+import { createCocktail, getIngredientsGroup } from '../api/api';
 import { ReqIngredients } from '../lib/req.types';
-import { IngredientsGroup } from '../lib/types';
 import InputIngredients from './shared/inputIngredients';
 
 interface Props {
   setOpened: (opened: boolean) => void;
-  ingredientsGroup: IngredientsGroup[];
 }
 
-export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
+export default function AddRecipe({ setOpened }: Props) {
   // const loader = useLoaderData();
   // const fetcher = useFetcher();
   const [ingredientValue, setIngredientValue] = useState<ReqIngredients>({
@@ -43,6 +41,8 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
   const [prevPosition, setPrevPosition] = useState(scrollPosition);
   const [sec, setSec] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+
+  const ingredientsGroup = useQuery(['ingredientGroup'], getIngredientsGroup);
 
   const interval = useInterval(() => {
     setSec((s) => !s);
@@ -127,25 +127,26 @@ export default function AddRecipe({ setOpened, ingredientsGroup }: Props) {
         onScrollPositionChange={onScrollPositionChange}
       >
         <Box mb={150}>
-          {ingredientsGroup.map((ingredient, index) => (
-            <Box
-              key={`addRecipe--${index}`}
-              ref={(ref: HTMLDivElement) => (refs.current[index] = ref)}
-              my="sm"
-            >
-              <Text transform="uppercase" size="lg" weight={700} m="xs">
-                {Object.keys(ingredient)[0]}
-              </Text>
-              <InputIngredients
-                ingredient={ingredient}
-                ingredientValue={ingredientValue}
-                setIngredientValue={setIngredientValue}
-                scrollTo={scrollTo}
-                componentIndex={index}
-                isScrolling={isScrolling}
-              />
-            </Box>
-          ))}
+          {ingredientsGroup.data &&
+            ingredientsGroup.data.map((ingredient, index) => (
+              <Box
+                key={`addRecipe--${index}`}
+                ref={(ref: HTMLDivElement) => (refs.current[index] = ref)}
+                my="sm"
+              >
+                <Text transform="uppercase" size="lg" weight={700} m="xs">
+                  {Object.keys(ingredient)[0]}
+                </Text>
+                <InputIngredients
+                  ingredient={ingredient}
+                  ingredientValue={ingredientValue}
+                  setIngredientValue={setIngredientValue}
+                  scrollTo={scrollTo}
+                  componentIndex={index}
+                  isScrolling={isScrolling}
+                />
+              </Box>
+            ))}
         </Box>
       </ScrollArea.Autosize>
 

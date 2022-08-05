@@ -6,3 +6,5 @@ export const ingredientType: IngredientType[] = [
   'juice',
   'other',
 ];
+
+export const ingreGroupName: string[] = ['Base', 'Liquor', 'Juice', 'Other'];

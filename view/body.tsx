@@ -1,21 +1,30 @@
-import { Box, Collapse, Divider, Grid, Loader, Text } from '@mantine/core';
+import {
+  Box,
+  Collapse,
+  Divider,
+  Grid,
+  Loader,
+  Paper,
+  Skeleton,
+  Text,
+} from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ObjectTyped } from 'object-typed';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ChevronDown, X } from 'tabler-icons-react';
-import { searchCocktails } from '../api/api';
+import {
+  getProcessedIngredientNames,
+  getRandomCocktail,
+  searchCocktails,
+} from '../api/api';
 import { ReqSearch } from '../lib/req.types';
-import { ResCocktail, ResCocktailsName } from '../lib/res.types';
-import { IngredientsName, SelectSearchItems } from '../lib/types';
+import { ResCocktailsName } from '../lib/res.types';
+import { SelectSearchItems } from '../lib/types';
 import CocktailView from './shared/cocktailView';
 import IngredientSelector from './shared/ingredientSelector';
 import SearchCollapse from './shared/searchCollapse';
-interface Props {
-  cocktail: ResCocktail;
-  ingredientsName: IngredientsName;
-}
 
 type ResSearchError = AxiosError<{
   data: ResCocktailsName;
@@ -23,7 +32,7 @@ type ResSearchError = AxiosError<{
   error_code: number;
 }>;
 
-function Body({ cocktail, ingredientsName }: Props) {
+function Body() {
   const [selectIngrState, setSelectIngrState] = useState<SelectSearchItems>({
     base: [],
     sub: [],
@@ -33,9 +42,15 @@ function Body({ cocktail, ingredientsName }: Props) {
   const [isOpened, setIsOpened] = useState(false);
   const [isDividerOpened, setIsDividerOpened] = useState(false);
 
+  const ingredientsName = useQuery(
+    ['ingredientsName'],
+    getProcessedIngredientNames
+  );
+
+  const randomCocktail = useQuery(['randomCocktail'], getRandomCocktail);
+
   const ingredientsMutate = useMutation(searchCocktails, {
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       setIsOpened(true);
       setIsDividerOpened(true);
     },
@@ -57,6 +72,21 @@ function Body({ cocktail, ingredientsName }: Props) {
 
   const data =
     ingredientsMutate.data || ingredientsMutate.error?.response?.data.data;
+
+  const loadingSkeleton = useCallback(
+    () => (
+      <Paper shadow="md" p="md" pt={2} my="md">
+        <Divider
+          mt="xs"
+          mb="sm"
+          label={<Loader size="xs" />}
+          labelPosition="center"
+        />
+        <Skeleton height={105} />
+      </Paper>
+    ),
+    []
+  );
 
   useEffect(() => {
     const param: Partial<ReqSearch> = {};
@@ -80,19 +110,27 @@ function Body({ cocktail, ingredientsName }: Props) {
         >
           Recommend Today Drink
         </Text>
-        <CocktailView cocktail={cocktail} />
+        {/* {!randomCocktail.data ? (
+          <div>loading...</div>
+        ) : ( */}
+        <CocktailView cocktail={randomCocktail.data} />
       </Grid.Col>
       <Grid.Col xs={6}>
-        {ingredientsName
-          .filter((data) => data?.[0].groupkey !== 'other')
-          .map((data, index: number) => (
-            <IngredientSelector
-              ingredients={data}
-              state={[selectIngrState, setSelectIngrState]}
-              ingrName={{ name: data[0].group, key: data[0].groupkey }}
-              key={`ingredient--${data[0].group}--${index}`}
-            />
-          ))}
+        {ingredientsName.isLoading ? (
+          <div>{Array(3).fill(loadingSkeleton())}</div>
+        ) : (
+          ingredientsName.data &&
+          ingredientsName.data
+            .filter((data) => data?.[0].groupkey !== 'other')
+            .map((data, index: number) => (
+              <IngredientSelector
+                ingredients={data}
+                state={[selectIngrState, setSelectIngrState]}
+                ingrName={{ name: data[0].group, key: data[0].groupkey }}
+                key={`ingredient--${data[0].group}--${index}`}
+              />
+            ))
+        )}
         <Box my="md">
           <Collapse
             in={!isOpened && (data || ingredientsMutate.isLoading)}
@@ -121,7 +159,6 @@ function Body({ cocktail, ingredientsName }: Props) {
                   marginY: 0,
                 },
                 onClick: () => {
-                  console.log('click');
                   setIsOpened(true);
                 },
               }}

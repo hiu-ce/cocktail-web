@@ -1,26 +1,13 @@
 import { Button, Center, Grid, Group, Modal, ScrollArea } from '@mantine/core';
-import type {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage,
-} from 'next';
+import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { getCocktailNames, getCocktails, getIngredientNames } from '../api/api';
-import { ingredientType } from '../lib/constant';
-import { ResCocktailsName, ResIngredientsName } from '../lib/res.types';
-import { IngredientsGroup } from '../lib/types';
 import AddRecipe from '../view/addRecipe';
 import SearchBar from '../view/searchBar';
 import CocktailTitle from '../view/title';
 import Body from '../view/body';
 
-const Home: NextPage = ({
-  searchItem,
-  ingredientsName,
-  randomCocktail,
-  ingredientsGroup,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Home: NextPage = () => {
   const [opened, setOpened] = useState(false);
   const router = useRouter();
 
@@ -47,17 +34,14 @@ const Home: NextPage = ({
               <Button onClick={() => setOpened(true)}>Add Recipe</Button>
             </Group>
           </Grid.Col>
-          <main>
+          <main style={{ width: '100%' }}>
             <Grid.Col xs={12} style={{ width: '100%' }}>
               <Center style={{ width: '100%' }}>
-                <SearchBar searchItem={searchItem} />
+                <SearchBar />
               </Center>
             </Grid.Col>
             <Grid.Col xs={12}>
-              <Body
-                cocktail={randomCocktail}
-                ingredientsName={ingredientsName}
-              />
+              <Body />
             </Grid.Col>
           </main>
         </Grid>
@@ -70,70 +54,11 @@ const Home: NextPage = ({
           style={{ overflow: 'hidden' }}
           trapFocus
         >
-          <AddRecipe
-            setOpened={setOpened}
-            ingredientsGroup={ingredientsGroup}
-          />
+          <AddRecipe setOpened={setOpened} />
         </Modal>
       </Center>
     </ScrollArea>
   );
-};
-
-const date = () => {
-  const d = new Date();
-  let month = `${d.getMonth() + 1}`;
-  let day = `${d.getDate()}`;
-  const year = d.getFullYear();
-
-  if (month.length < 2) month = `0${month}`;
-  if (day.length < 2) day = `0${day}`;
-
-  const getDate = [year, month, day].join('');
-  return `${getDate}`;
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const ingreGroupName: string[] = ['Base', 'Liquor', 'Juice', 'Other'];
-  const cocktailsData: ResCocktailsName = await getCocktailNames();
-  const cocktailsName = cocktailsData.map((d) => ({
-    value: d.cocktail_name,
-    group: 'Cocktail',
-    groupkey: 'cocktail',
-  }));
-  const randomCocktailId = (parseInt(date()) * 806) % cocktailsData.length;
-  const randomCocktail = await getCocktails(
-    cocktailsData[randomCocktailId].cocktail_name
-  );
-
-  const ingredientsData: ResIngredientsName = await getIngredientNames();
-
-  const ingredientsGroup: IngredientsGroup[] = Object.values(
-    ingredientsData
-  ).map((data, index) => ({
-    [Object.keys(ingredientsData)[index]]: data.map((d) => Object.values(d)[0]),
-  }));
-
-  const ingredientsName = Object.values(ingredientsData).map((data, index) => {
-    return data.map((d) => ({
-      value: d.drink_name ? d.drink_name : d.name,
-      key: `ingredient--${d.drink_name ? d.drink_name : d.name}--${
-        ingreGroupName[index]
-      }`,
-      group: ingreGroupName[index],
-      groupkey: ingredientType[index],
-    }));
-  });
-  const searchItem = [...cocktailsName, ...ingredientsName.flat()];
-
-  return {
-    props: {
-      searchItem,
-      ingredientsName,
-      randomCocktail,
-      ingredientsGroup,
-    }, // will be passed to the page component as props
-  };
 };
 
 export default Home;

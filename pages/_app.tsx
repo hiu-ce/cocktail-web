@@ -5,11 +5,15 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import axios from 'axios';
 import { NotificationsProvider } from '@mantine/notifications';
 import '../styles/globals.css';
+import { useEffect } from 'react';
 
 const queryClient = new QueryClient();
 
 export default function App(props: AppProps) {
-  axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  useEffect(() => {
+    axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  }, []);
+
   const { Component, pageProps } = props;
 
   return (

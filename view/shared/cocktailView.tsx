@@ -5,6 +5,7 @@ import {
   Divider,
   Image,
   Paper,
+  Skeleton,
   Tabs,
   Text,
   useMantineTheme,
@@ -75,10 +76,12 @@ function CocktailView({ cocktail }: Props) {
       other: theme.fn.rgba(theme.colors.lime[9], 0.28),
     },
   };
-  const ingrKeys = Object.keys(cocktail).filter(
-    (key): key is 'base' | 'sub' | 'juice' =>
-      key == 'base' || key == 'sub' || key == 'juice'
-  );
+  const ingrKeys = cocktail
+    ? Object.keys(cocktail).filter(
+        (key): key is 'base' | 'sub' | 'juice' =>
+          key == 'base' || key == 'sub' || key == 'juice'
+      )
+    : [];
   const [activeTab, setActiveTab] = useState<string | null>('ml');
 
   const ingrNameBadge = useCallback(
@@ -97,20 +100,20 @@ function CocktailView({ cocktail }: Props) {
         {ingredient}
       </Badge>
     ),
-    []
+    [color.bg, color.default]
   );
 
   return (
     <Card shadow="md" p="lg" radius="md">
       <Card.Section>
         <Image
-          src="https://www.eatthis.com/wp-content/uploads/sites/4/2019/03/old-fashioned-cocktail.jpg?quality=82&strip=1"
+          src="https://mblogthumb-phinf.pstatic.net/MjAxNzAzMTJfMjY3/MDAxNDg5Mjk2ODUyMDAz.6ZKzDX86YZh32qXlu7xuxQSOuI55wF3n9sGuLSRkF0Mg.8tx-NlT4UQgdyOVtSbqUb6VHrJqyXwzGCd6fWn_sgRwg.PNG.wlsdml1103/%EB%A6%AC%EB%88%85%EC%8A%A4.png?type=w800"
           height={250}
           alt="Norway"
         />
       </Card.Section>
       <Text weight={850} size={20} my={15}>
-        {cocktail.cocktail_name}
+        {cocktail?.cocktail_name ?? 'loading...'}
       </Text>
       <Tabs
         styles={{
@@ -138,25 +141,34 @@ function CocktailView({ cocktail }: Props) {
           </Tabs.Tab>
         </Tabs.List>
       </Tabs>
-      {ingrKeys.map(
-        (key) =>
-          cocktail[key] && //////fix!!!!!!
-          Object.keys(cocktail[key]).map((ingredient) => (
-            <Box mb="xs" key={`cocktail-view--${String(key)}--${ingredient}`}>
-              {ingrNameBadge(key, ingredient)}
-              <AmountBadge
-                amount={cocktail[key][ingredient]}
-                subText={activeTab ? activeTab : 'ml'}
-              >
-                {activeTab === 'ml'
-                  ? cocktail[key][ingredient]
-                  : mlOzCalc(cocktail[key][ingredient])}
-              </AmountBadge>
-            </Box>
-          ))
+      {ingrKeys.length ? (
+        ingrKeys.map(
+          (key) =>
+            cocktail[key] && //////fix!!!!!!
+            Object.keys(cocktail[key]).map((ingredient) => (
+              <Box mb="xs" key={`cocktail-view--${String(key)}--${ingredient}`}>
+                {ingrNameBadge(key, ingredient)}
+                <AmountBadge
+                  amount={cocktail[key][ingredient]}
+                  subText={activeTab ? activeTab : 'ml'}
+                >
+                  {activeTab === 'ml'
+                    ? cocktail[key][ingredient]
+                    : mlOzCalc(cocktail[key][ingredient])}
+                </AmountBadge>
+              </Box>
+            ))
+        )
+      ) : (
+        <Box mb="xs">
+          {ingrNameBadge('base', 'loading')}
+          <AmountBadge>
+            <Text>Loading</Text>
+          </AmountBadge>
+        </Box>
       )}
 
-      {cocktail.other &&
+      {cocktail?.other &&
         Object.keys(cocktail.other).map(
           (other) =>
             cocktail.other && (
@@ -167,9 +179,11 @@ function CocktailView({ cocktail }: Props) {
             )
         )}
       <Divider mt="lg" mb="sm" label="믹싱 방법" labelPosition="center" />
-      <Paper p="md" style={{ backgroundColor: theme.colors.dark[6] }}>
-        <Text>{cocktail.recipe}</Text>
-      </Paper>
+      <Skeleton visible={!cocktail}>
+        <Paper p="md" style={{ backgroundColor: theme.colors.dark[6] }}>
+          <Text>{cocktail?.recipe || 't\nt\nt\n'}</Text>
+        </Paper>
+      </Skeleton>
 
       {/* {JSON.stringify(cocktail)} */}
     </Card>
