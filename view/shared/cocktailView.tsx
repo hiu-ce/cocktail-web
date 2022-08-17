@@ -70,7 +70,7 @@ function CocktailView({ cocktail, isMobileMain }: Props) {
         <Collapse in={isOpened || !isMobileMain}>
           <Image
             src={
-              cocktail.img_url ||
+              cocktail?.img_url ||
               'https://www.eatthis.com/wp-content/uploads/sites/4/2019/03/old-fashioned-cocktail.jpg?quality=82&strip=1'
             }
             height={250}
