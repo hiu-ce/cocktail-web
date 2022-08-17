@@ -83,8 +83,14 @@ function Body({ scrollToBottom }: Props) {
     ingredientsMutate.data || ingredientsMutate.error?.response?.data.data;
 
   const loadingSkeleton = useCallback(
-    () => (
-      <Paper shadow="md" p="md" pt={2} my="md">
+    (index: number) => (
+      <Paper
+        shadow="md"
+        p="md"
+        pt={2}
+        my="md"
+        key={`body--loadingSkeleton--${index}`}
+      >
         <Divider
           mt="xs"
           mb="sm"
@@ -130,7 +136,7 @@ function Body({ scrollToBottom }: Props) {
       </Grid.Col>
       <Grid.Col xs={6}>
         {ingredientsName.isLoading ? (
-          <div>{Array(3).fill(loadingSkeleton())}</div>
+          <div>{Array(3).map((_, index) => loadingSkeleton(index))}</div>
         ) : (
           ingredientsName.data &&
           ingredientsName.data
