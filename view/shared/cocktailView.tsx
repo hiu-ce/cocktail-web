@@ -8,6 +8,7 @@ import {
   Divider,
   Image,
   Paper,
+  Skeleton,
   Tabs,
   Text,
   useMantineTheme,
@@ -68,14 +69,16 @@ function CocktailView({ cocktail, isMobileMain }: Props) {
           </Collapse>
         )}
         <Collapse in={isOpened || !isMobileMain}>
-          <Image
-            src={
-              cocktail?.img_url ||
-              'https://www.eatthis.com/wp-content/uploads/sites/4/2019/03/old-fashioned-cocktail.jpg?quality=82&strip=1'
-            }
-            height={250}
-            alt="Cocktail Image"
-          />
+          <Skeleton visible={cocktail?.img_url === undefined}>
+            <Image
+              src={
+                cocktail?.img_url ||
+                'https://www.eatthis.com/wp-content/uploads/sites/4/2019/03/old-fashioned-cocktail.jpg?quality=82&strip=1'
+              }
+              height={250}
+              alt="Cocktail Image"
+            />
+          </Skeleton>
         </Collapse>
       </Card.Section>
       <Text weight={850} size={20} my={15}>
