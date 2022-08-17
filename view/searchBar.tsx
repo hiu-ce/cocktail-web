@@ -4,7 +4,6 @@ import {
   Box,
   FocusTrap,
   Modal,
-  ScrollArea,
   Stack,
   useMantineTheme,
 } from '@mantine/core';
@@ -28,7 +27,6 @@ interface Props {
 }
 export default function SearchBar({ scrollToSearchBar }: Props) {
   const theme = useMantineTheme();
-  console.log(theme.breakpoints);
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`);
 
   const [item, setItem] = useState<SearchItem | undefined>();
@@ -40,20 +38,11 @@ export default function SearchBar({ scrollToSearchBar }: Props) {
 
   const [active, handlers] = useDisclosure(false);
 
-  // const res = useQueries({
-  //   queries: [
-  //     { queryKey: ['search', 1], queryFn: getCocktailNames },
-  //     { queryKey: ['search', 2], queryFn: () => getIngredientNames() },
-  //   ],
-  // });
-  const cocktailsName = useQuery(['cocktailName'], getProcessedCocktailNames, {
-    // onSuccess: (data) =>
-  });
+  const cocktailsName = useQuery(['cocktailName'], getProcessedCocktailNames);
 
   const ingredientsName = useQuery(
     ['ingredientsName'],
-    getProcessedIngredientNames,
-    {}
+    getProcessedIngredientNames
   );
 
   const data = [
@@ -108,7 +97,7 @@ export default function SearchBar({ scrollToSearchBar }: Props) {
               transition="scale-y"
               transitionDuration={300}
               transitionTimingFunction="ease"
-              dropdownComponent={ScrollArea}
+              // dropdownComponent={ScrollArea}
               dropdownPosition="bottom"
               maxDropdownHeight="45vh"
               limit={data.length || 1}
