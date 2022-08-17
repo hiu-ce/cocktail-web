@@ -27,6 +27,7 @@ export type ResIngredients = Record<IngredientType, ResIngredient>;
 export interface ResCocktail extends Partial<ResIngredients> {
   cocktail_name: string;
   recipe: string;
+  img_url: string;
 }
 export type ResCocktails = ResCocktail[];
 

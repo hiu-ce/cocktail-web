@@ -69,7 +69,10 @@ function CocktailView({ cocktail, isMobileMain }: Props) {
         )}
         <Collapse in={isOpened || !isMobileMain}>
           <Image
-            src="https://mblogthumb-phinf.pstatic.net/MjAxNzAzMTJfMjY3/MDAxNDg5Mjk2ODUyMDAz.6ZKzDX86YZh32qXlu7xuxQSOuI55wF3n9sGuLSRkF0Mg.8tx-NlT4UQgdyOVtSbqUb6VHrJqyXwzGCd6fWn_sgRwg.PNG.wlsdml1103/%EB%A6%AC%EB%88%85%EC%8A%A4.png?type=w800"
+            src={
+              cocktail.img_url ||
+              'https://www.eatthis.com/wp-content/uploads/sites/4/2019/03/old-fashioned-cocktail.jpg?quality=82&strip=1'
+            }
             height={250}
             alt="Cocktail Image"
           />
