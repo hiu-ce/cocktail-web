@@ -46,9 +46,8 @@ interface NameBadgeProps {
   ingrKey: 'base' | 'sub' | 'juice' | 'other';
   ingredient: string;
 }
-function NameBadge({ ingrKey, ingredient }: NameBadgeProps) {
+export function NameBadge({ ingrKey, ingredient }: NameBadgeProps) {
   const theme = useMantineTheme();
-
   const color = {
     default: {
       base: theme.colors.cyan[2],
@@ -64,6 +63,7 @@ function NameBadge({ ingrKey, ingredient }: NameBadgeProps) {
       other: theme.fn.rgba(theme.colors.lime[9], 0.28),
     },
   };
+
   return (
     <Badge
       styles={{
@@ -83,7 +83,7 @@ function NameBadge({ ingrKey, ingredient }: NameBadgeProps) {
 
 interface Props {
   ingredient: string;
-  ingrKey: 'base' | 'sub' | 'juice';
+  ingrKey: 'base' | 'sub' | 'juice' | 'other';
   amount: number;
   activeTab: string | null;
 }
@@ -91,15 +91,20 @@ interface Props {
 function CocktailIngrChip({ ingredient, ingrKey, amount, activeTab }: Props) {
   return (
     <Box mb="xs" key={`cocktail-view--${String(ingrKey)}--${ingredient}`}>
-      {/* {ingrNameBadge(key, ingredient)} */}
       <NameBadge ingrKey={ingrKey} ingredient={ingredient} />
-      <AmountBadge amount={amount} subText={activeTab ? activeTab : 'ml'}>
-        {activeTab === 'ml' ? (
+      {ingrKey === 'other' ? (
+        <AmountBadge>
           <Text>{amount}</Text>
-        ) : (
-          <Text>{mlOzCalc(amount)}</Text>
-        )}
-      </AmountBadge>
+        </AmountBadge>
+      ) : (
+        <AmountBadge amount={amount} subText={activeTab ? activeTab : 'ml'}>
+          {activeTab === 'ml' ? (
+            <Text>{amount}</Text>
+          ) : (
+            <Text>{mlOzCalc(amount)}</Text>
+          )}
+        </AmountBadge>
+      )}
     </Box>
   );
 }

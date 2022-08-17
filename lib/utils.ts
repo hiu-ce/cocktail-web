@@ -20,6 +20,6 @@ export function josa(word: string) {
 }
 
 export function mlOzCalc(ml: number) {
-  const oz = ml / 29.574;
+  const oz = ml / 30;
   return Math.round(oz * 10) / 10;
 }

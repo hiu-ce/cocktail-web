@@ -7,7 +7,9 @@ import {
   Paper,
   Skeleton,
   Text,
+  useMantineTheme,
 } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -37,6 +39,9 @@ interface Props {
 }
 
 function Body({ scrollToBottom }: Props) {
+  const theme = useMantineTheme();
+  const isMobile = !useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+
   const [selectIngrState, setSelectIngrState] = useState<SelectSearchItems>({
     base: [],
     sub: [],
@@ -121,10 +126,7 @@ function Body({ scrollToBottom }: Props) {
         >
           Recommend Today Drink
         </Text>
-        {/* {!randomCocktail.data ? (
-          <div>loading...</div>
-        ) : ( */}
-        <CocktailView cocktail={randomCocktail.data} isMain={true} />
+        <CocktailView cocktail={randomCocktail.data} isMobileMain={isMobile} />
       </Grid.Col>
       <Grid.Col xs={6}>
         {ingredientsName.isLoading ? (

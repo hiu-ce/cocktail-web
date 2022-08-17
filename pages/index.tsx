@@ -6,7 +6,6 @@ import AddRecipe from '../view/addRecipe';
 import SearchBar from '../view/searchBar';
 import CocktailTitle from '../view/title';
 import Body from '../view/body';
-import { Plus } from 'tabler-icons-react';
 
 const Home: NextPage = () => {
   const [opened, setOpened] = useState(false);

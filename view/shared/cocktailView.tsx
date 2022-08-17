@@ -8,12 +8,11 @@ import {
   Divider,
   Image,
   Paper,
-  Skeleton,
   Tabs,
   Text,
   useMantineTheme,
 } from '@mantine/core';
-import { useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ChevronDown,
   ChevronUp,
@@ -22,67 +21,59 @@ import {
   Scale,
   X,
 } from 'tabler-icons-react';
-import CocktailIngrChip, { AmountBadge } from './cocktailIngrChip';
+import CocktailIngrChip, { AmountBadge, NameBadge } from './cocktailIngrChip';
 
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cocktail: any;
-  isMain?: boolean;
+  isMobileMain?: boolean;
 }
 
-function CocktailView({ cocktail, isMain }: Props) {
-  const [isOpened, setIsOpened] = useState(!isMain);
+function CocktailView({ cocktail, isMobileMain }: Props) {
+  const [isOpened, setIsOpened] = useState(!isMobileMain);
   const theme = useMantineTheme();
   const color = {
-    default: {
-      base: theme.colors.cyan[2],
-      sub: theme.colors.teal[2],
-      juice: theme.colors.green[2],
-      // other: theme.colors.lime[2],
-      other: theme.fn.rgba(theme.colors.lime[1], 0.9),
-    },
-    bg: {
-      base: theme.fn.rgba(theme.colors.cyan[8], 0.28),
-      sub: theme.fn.rgba(theme.colors.teal[8], 0.28),
-      juice: theme.fn.rgba(theme.colors.green[9], 0.28),
-      other: theme.fn.rgba(theme.colors.lime[9], 0.28),
-    },
+    base: 'cyan',
+    sub: 'blue',
+    juice: 'indigo',
+    // other: 'lime',
+    other: 'violet',
   };
   const ingrKeys = cocktail
     ? Object.keys(cocktail).filter(
-        (key): key is 'base' | 'sub' | 'juice' =>
-          key == 'base' || key == 'sub' || key == 'juice'
+        (key): key is 'base' | 'sub' | 'juice' | 'other' =>
+          key == 'base' || key == 'sub' || key == 'juice' || key == 'other'
       )
     : [];
   const [activeTab, setActiveTab] = useState<string | null>('ml');
 
-  const ingrNameBadge = useCallback(
-    (key: 'base' | 'sub' | 'juice' | 'other', ingredient: string) => (
-      <Badge
-        styles={{
-          root: {
-            color: color.default[key],
-            backgroundColor: color.bg[key],
-          },
-        }}
-        size="lg"
-        radius="md"
-        p="xs"
-      >
-        {ingredient}
-      </Badge>
-    ),
-    [color.bg, color.default]
-  );
+  useEffect(() => {
+    setIsOpened(!isMobileMain);
+  }, [isMobileMain]);
 
   return (
     <Card shadow="md" p="lg" radius="md">
       <Card.Section>
-        <Image
-          src="https://mblogthumb-phinf.pstatic.net/MjAxNzAzMTJfMjY3/MDAxNDg5Mjk2ODUyMDAz.6ZKzDX86YZh32qXlu7xuxQSOuI55wF3n9sGuLSRkF0Mg.8tx-NlT4UQgdyOVtSbqUb6VHrJqyXwzGCd6fWn_sgRwg.PNG.wlsdml1103/%EB%A6%AC%EB%88%85%EC%8A%A4.png?type=w800"
-          height={250}
-          alt="Norway"
-        />
+        {isMobileMain && (
+          <Collapse in={!isOpened}>
+            <Divider
+              mt="xs"
+              mb={0}
+              mx="20%"
+              label="Open to show image"
+              labelPosition="center"
+              variant="dashed"
+              size="xs"
+            />
+          </Collapse>
+        )}
+        <Collapse in={isOpened || !isMobileMain}>
+          <Image
+            src="https://mblogthumb-phinf.pstatic.net/MjAxNzAzMTJfMjY3/MDAxNDg5Mjk2ODUyMDAz.6ZKzDX86YZh32qXlu7xuxQSOuI55wF3n9sGuLSRkF0Mg.8tx-NlT4UQgdyOVtSbqUb6VHrJqyXwzGCd6fWn_sgRwg.PNG.wlsdml1103/%EB%A6%AC%EB%88%85%EC%8A%A4.png?type=w800"
+            height={250}
+            alt="Cocktail Image"
+          />
+        </Collapse>
       </Card.Section>
       <Text weight={850} size={20} my={15}>
         {cocktail?.cocktail_name ?? 'loading...'}
@@ -134,9 +125,9 @@ function CocktailView({ cocktail, isMain }: Props) {
                 />
               ) : (
                 <Box mb="xs" style={{ display: 'flex', alignItems: 'center' }}>
-                  {ingrNameBadge(key, key)}
+                  <NameBadge ingrKey={key} ingredient={key} />
                   <Badge
-                    color="cyan"
+                    color={color[key]}
                     styles={(theme) => ({
                       inner: {
                         fontSize: 12,
@@ -199,23 +190,13 @@ function CocktailView({ cocktail, isMain }: Props) {
         })
       ) : (
         <Box mb="xs">
-          {ingrNameBadge('base', 'loading')}
+          <NameBadge ingrKey="base" ingredient="loading" />
           <AmountBadge>
             <Text>Loading</Text>
           </AmountBadge>
         </Box>
       )}
 
-      {cocktail?.other &&
-        Object.keys(cocktail.other).map(
-          (other) =>
-            cocktail.other && (
-              <Box mb="xs" key={`cocktail-viwe--other--${other}`}>
-                {ingrNameBadge('other', other)}
-                <AmountBadge>{cocktail.other[other]}</AmountBadge>
-              </Box>
-            )
-        )}
       <Divider
         mt="lg"
         mb="sm"
@@ -239,15 +220,11 @@ function CocktailView({ cocktail, isMain }: Props) {
           },
         }}
       />
-      <Collapse in={isOpened}>
-        <Skeleton visible={!cocktail}>
-          <Paper p="md" style={{ backgroundColor: theme.colors.dark[6] }}>
-            <Text>{cocktail?.recipe || 't\nt\nt\n'}</Text>
-          </Paper>
-        </Skeleton>
+      <Collapse in={isOpened && cocktail}>
+        <Paper p="md" style={{ backgroundColor: theme.colors.dark[6] }}>
+          <Text>{cocktail?.recipe || 't\nt\nt\n'}</Text>
+        </Paper>
       </Collapse>
-
-      {/* {JSON.stringify(cocktail)} */}
     </Card>
   );
 }
