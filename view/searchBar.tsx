@@ -6,8 +6,9 @@ import {
   Modal,
   ScrollArea,
   Stack,
+  useMantineTheme,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ChevronsDown, PlaylistX, Search } from 'tabler-icons-react';
@@ -22,10 +23,14 @@ import { SearchItem } from '../lib/types';
 import CocktailView from './shared/cocktailView';
 import SearchCollapse from './shared/searchCollapse';
 
-// interface Props {
-// searchItem: SearchItems;
-// }
-export default function SearchBar() {
+interface Props {
+  scrollToSearchBar: () => void;
+}
+export default function SearchBar({ scrollToSearchBar }: Props) {
+  const theme = useMantineTheme();
+  console.log(theme.breakpoints);
+  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`);
+
   const [item, setItem] = useState<SearchItem | undefined>();
   const [value, setValue] = useState('');
   const [searchedText, setSearchedText] = useState('');
@@ -141,6 +146,7 @@ export default function SearchBar() {
                 findItem(item);
               }}
               onFocus={() => {
+                if (isMobile) scrollToSearchBar();
                 setSearchCollapseIsOpened(false);
                 handlers.close();
               }}

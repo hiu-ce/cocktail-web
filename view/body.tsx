@@ -32,7 +32,11 @@ type ResSearchError = AxiosError<{
   error_code: number;
 }>;
 
-function Body() {
+interface Props {
+  scrollToBottom: () => void;
+}
+
+function Body({ scrollToBottom }: Props) {
   const [selectIngrState, setSelectIngrState] = useState<SelectSearchItems>({
     base: [],
     sub: [],
@@ -99,6 +103,13 @@ function Body() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectIngrState]);
 
+  useEffect(() => {
+    if (data) {
+      setTimeout(() => scrollToBottom(), 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
   return (
     <Grid>
       <Grid.Col xs={6}>
@@ -113,7 +124,7 @@ function Body() {
         {/* {!randomCocktail.data ? (
           <div>loading...</div>
         ) : ( */}
-        <CocktailView cocktail={randomCocktail.data} />
+        <CocktailView cocktail={randomCocktail.data} isMain={true} />
       </Grid.Col>
       <Grid.Col xs={6}>
         {ingredientsName.isLoading ? (

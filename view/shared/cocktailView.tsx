@@ -1,7 +1,10 @@
 import {
+  ActionIcon,
   Badge,
   Box,
+  Button,
   Card,
+  Collapse,
   Divider,
   Image,
   Paper,
@@ -11,55 +14,24 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { useCallback, useState } from 'react';
-import { GlassFull, Scale } from 'tabler-icons-react';
-import { mlOzCalc } from '../../lib/utils';
+import {
+  ChevronDown,
+  ChevronUp,
+  GlassFull,
+  Plus,
+  Scale,
+  X,
+} from 'tabler-icons-react';
+import CocktailIngrChip, { AmountBadge } from './cocktailIngrChip';
 
 interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cocktail: any;
+  isMain?: boolean;
 }
 
-interface AmountProps {
-  amount?: number;
-  subText?: string;
-  children?: JSX.Element;
-}
-function AmountBadge({ amount, children, subText }: AmountProps) {
-  const theme = useMantineTheme();
-
-  function amountColor() {
-    return !amount
-      ? 'violet'
-      : amount <= 30
-      ? 'cyan'
-      : amount <= 60
-      ? 'blue'
-      : 'indigo';
-  }
-
-  return (
-    <Badge
-      color={amountColor()}
-      styles={(theme) => ({
-        inner: {
-          fontSize: 12,
-          textTransform: 'none',
-          color: theme.colors.gray[6],
-          display: 'flex',
-        },
-      })}
-      variant="dot"
-      size="md"
-      mx="xs"
-    >
-      <Text mr={subText && 4} color={theme.colors.gray[3]} weight={800}>
-        {children}
-      </Text>
-      {subText}
-    </Badge>
-  );
-}
-
-function CocktailView({ cocktail }: Props) {
+function CocktailView({ cocktail, isMain }: Props) {
+  const [isOpened, setIsOpened] = useState(!isMain);
   const theme = useMantineTheme();
   const color = {
     default: {
@@ -139,26 +111,92 @@ function CocktailView({ cocktail }: Props) {
           <Tabs.Tab value="oz" icon={<Scale strokeWidth={1.5} size={16} />}>
             OZ
           </Tabs.Tab>
+          <ActionIcon ml="auto" onClick={() => setIsOpened(!isOpened)}>
+            {isOpened ? <X strokeWidth={1.5} /> : <Plus strokeWidth={1.5} />}
+          </ActionIcon>
         </Tabs.List>
       </Tabs>
       {ingrKeys.length ? (
-        ingrKeys.map(
-          (key) =>
-            cocktail[key] && //////fix!!!!!!
-            Object.keys(cocktail[key]).map((ingredient) => (
-              <Box mb="xs" key={`cocktail-view--${String(key)}--${ingredient}`}>
-                {ingrNameBadge(key, ingredient)}
-                <AmountBadge
-                  amount={cocktail[key][ingredient]}
-                  subText={activeTab ? activeTab : 'ml'}
-                >
-                  {activeTab === 'ml'
-                    ? cocktail[key][ingredient]
-                    : mlOzCalc(cocktail[key][ingredient])}
-                </AmountBadge>
-              </Box>
-            ))
-        )
+        ingrKeys.map((key) => {
+          const item = Object.keys(cocktail[key]);
+          const firstItem = item[0];
+          const length = item.length;
+
+          return length ? (
+            //////fix!!!!!!
+            <Box key={`cocktail-view--${String(key)}--${firstItem}`}>
+              {isOpened ? (
+                <CocktailIngrChip
+                  ingredient={firstItem}
+                  ingrKey={key}
+                  activeTab={activeTab}
+                  amount={cocktail[key][firstItem]}
+                />
+              ) : (
+                <Box mb="xs" style={{ display: 'flex', alignItems: 'center' }}>
+                  {ingrNameBadge(key, key)}
+                  <Badge
+                    color="cyan"
+                    styles={(theme) => ({
+                      inner: {
+                        fontSize: 12,
+                        textTransform: 'none',
+                        color: theme.colors.gray[6],
+                        display: 'flex',
+                        alignItems: 'center',
+                      },
+                      rightSection: {
+                        marginLeft: 0,
+                      },
+                    })}
+                    variant="dot"
+                    size="md"
+                    mx="xs"
+                  >
+                    <Button
+                      variant="subtle"
+                      onClick={() => setIsOpened(!isOpened)}
+                      styles={() => ({
+                        root: {
+                          ':hover': {
+                            backgroundColor: 'rgba(0,0,0,0)',
+                          },
+                          fontSize: 12,
+                        },
+                      })}
+                      px={0}
+                      py={10}
+                    >
+                      <Text mr={4} color={theme.colors.gray[3]} weight={800}>
+                        {length}
+                      </Text>
+                      <Plus
+                        color={theme.colors.gray[4]}
+                        size={12}
+                        strokeWidth={1.5}
+                      />
+                    </Button>
+                  </Badge>
+                </Box>
+              )}
+              <Collapse in={isOpened}>
+                {item.map((ingredient, index) => {
+                  return index ? (
+                    <CocktailIngrChip
+                      ingredient={ingredient}
+                      ingrKey={key}
+                      key={`cocktailIngrChip--${String(
+                        key
+                      )}--${ingredient}--${index}`}
+                      activeTab={activeTab}
+                      amount={cocktail[key][ingredient]}
+                    />
+                  ) : null;
+                })}
+              </Collapse>
+            </Box>
+          ) : null;
+        })
       ) : (
         <Box mb="xs">
           {ingrNameBadge('base', 'loading')}
@@ -178,12 +216,36 @@ function CocktailView({ cocktail }: Props) {
               </Box>
             )
         )}
-      <Divider mt="lg" mb="sm" label="믹싱 방법" labelPosition="center" />
-      <Skeleton visible={!cocktail}>
-        <Paper p="md" style={{ backgroundColor: theme.colors.dark[6] }}>
-          <Text>{cocktail?.recipe || 't\nt\nt\n'}</Text>
-        </Paper>
-      </Skeleton>
+      <Divider
+        mt="lg"
+        mb="sm"
+        py={1}
+        label={
+          <>
+            {isOpened ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+            <Box ml="xs" my={0}>
+              <Text my={0}>믹싱 방법</Text>
+            </Box>
+          </>
+        }
+        labelPosition="center"
+        labelProps={{
+          style: {
+            cursor: 'pointer',
+            marginY: 0,
+          },
+          onClick: () => {
+            setIsOpened(!isOpened);
+          },
+        }}
+      />
+      <Collapse in={isOpened}>
+        <Skeleton visible={!cocktail}>
+          <Paper p="md" style={{ backgroundColor: theme.colors.dark[6] }}>
+            <Text>{cocktail?.recipe || 't\nt\nt\n'}</Text>
+          </Paper>
+        </Skeleton>
+      </Collapse>
 
       {/* {JSON.stringify(cocktail)} */}
     </Card>

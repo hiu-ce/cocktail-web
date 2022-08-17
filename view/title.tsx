@@ -6,6 +6,7 @@ export default function CocktailTitle() {
     <>
       <Text
         m="xl"
+        mx="xs"
         align="center"
         variant="gradient"
         gradient={{
