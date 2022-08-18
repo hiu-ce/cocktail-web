@@ -18,6 +18,7 @@ import {
   ChevronDown,
   ChevronUp,
   GlassFull,
+  Minus,
   Plus,
   Scale,
   X,
@@ -61,8 +62,22 @@ function CocktailView({ cocktail, isMobileMain }: Props) {
               mt="xs"
               mb={0}
               mx="20%"
-              label="Open to show image"
+              label={
+                <>
+                  <Plus size={12} strokeWidth={1} />
+                  <Text ml="xs">Open to show image</Text>
+                </>
+              }
               labelPosition="center"
+              labelProps={{
+                style: {
+                  cursor: 'pointer',
+                  marginY: 0,
+                },
+                onClick: () => {
+                  setIsOpened(!isOpened);
+                },
+              }}
               variant="dashed"
               size="xs"
             />
