@@ -41,6 +41,7 @@ interface Props {
 function Body({ scrollToBottom }: Props) {
   const theme = useMantineTheme();
   const isMobile = !useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+  const isBreakPoint = useMediaQuery('(max-width: 400px)');
 
   const [selectIngrState, setSelectIngrState] = useState<SelectSearchItems>({
     base: [],
@@ -127,8 +128,8 @@ function Body({ scrollToBottom }: Props) {
         <Text
           className="my-text"
           style={{ fontFamily: 'Fira Sans' }}
-          weight={700}
-          size={30}
+          weight={isBreakPoint ? 800 : 700}
+          size={isBreakPoint ? 20 : 30}
         >
           Recommend Today Drink
         </Text>

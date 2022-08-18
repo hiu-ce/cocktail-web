@@ -1,6 +1,9 @@
 import { Text, useMantineTheme } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 
 export default function CocktailTitle() {
+  const isBreakPoint = useMediaQuery('(max-width: 400px)');
+
   const theme = useMantineTheme();
   return (
     <>
@@ -16,10 +19,10 @@ export default function CocktailTitle() {
         }}
         style={{ fontFamily: 'LeferiBase' }}
         weight={550}
-        size={30}
+        size={isBreakPoint ? 25 : 30}
         transform="uppercase"
       >
-        Cocktail - Recipes
+        Cocktail-Recipes
       </Text>
     </>
   );
