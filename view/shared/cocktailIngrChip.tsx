@@ -2,7 +2,7 @@ import { Badge, Box, Text, useMantineTheme } from '@mantine/core';
 import { mlOzCalc } from '../../lib/utils';
 
 interface AmountProps {
-  amount?: number;
+  amount?: number | string;
   subText?: string | JSX.Element;
   children?: JSX.Element;
 }
@@ -84,7 +84,7 @@ export function NameBadge({ ingrKey, ingredient }: NameBadgeProps) {
 interface Props {
   ingredient: string;
   ingrKey: 'base' | 'sub' | 'juice' | 'other';
-  amount: number;
+  amount: number | string;
   activeTab: string | null;
 }
 
@@ -101,7 +101,7 @@ function CocktailIngrChip({ ingredient, ingrKey, amount, activeTab }: Props) {
           {activeTab === 'ml' ? (
             <Text>{amount}</Text>
           ) : (
-            <Text>{mlOzCalc(amount)}</Text>
+            <Text>{mlOzCalc(typeof amount === 'string' ? 0 : amount)}</Text>
           )}
         </AmountBadge>
       )}

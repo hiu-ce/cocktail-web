@@ -13,21 +13,22 @@ import {
   Text,
   useMantineTheme,
 } from '@mantine/core';
+import { ObjectTyped } from 'object-typed';
 import { useEffect, useState } from 'react';
 import {
   ChevronDown,
   ChevronUp,
   GlassFull,
-  Minus,
   Plus,
   Scale,
   X,
 } from 'tabler-icons-react';
+import { ResCocktail } from '../../lib/res.types';
 import CocktailIngrChip, { AmountBadge, NameBadge } from './cocktailIngrChip';
 
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  cocktail: any;
+  cocktail: ResCocktail;
   isMobileMain?: boolean;
 }
 
@@ -47,6 +48,43 @@ function CocktailView({ cocktail, isMobileMain }: Props) {
           key == 'base' || key == 'sub' || key == 'juice' || key == 'other'
       )
     : [];
+  const proof = cocktail
+    ? ObjectTyped.entries(cocktail.proof).map(([key, value]) => {
+        if (Object.keys(value).length) {
+          const proofArr = ObjectTyped.entries(value).map(
+            ([ingrName, proof]) => {
+              const amount = cocktail[key]?.[ingrName];
+              return (typeof amount === 'number' ? amount : 0) * proof;
+            }
+          );
+          return proofArr.reduce(function add(sum, currValue) {
+            return sum + currValue;
+          }, 0);
+        }
+        return 0;
+      })
+    : [];
+  const amount = cocktail
+    ? ObjectTyped.entries(cocktail)
+        .filter(
+          ([key, value]) =>
+            (key === 'base' || key === 'sub' || key === 'juice') &&
+            Object.keys(value || {}).length
+        )
+        .map(([, ingr]) => Object.values(ingr || {}))
+        .flat()
+    : [];
+  const cocktailProof = (
+    proof.reduce(function add(sum, currValue) {
+      return sum + currValue;
+    }, 0) /
+    amount.reduce(function add(sum, currValue) {
+      return sum + currValue;
+    }, 0)
+  ).toFixed(1);
+
+  // console.log(cocktailProof);
+
   const [activeTab, setActiveTab] = useState<string | null>('ml');
 
   useEffect(() => {
@@ -96,9 +134,27 @@ function CocktailView({ cocktail, isMobileMain }: Props) {
           </Skeleton>
         </Collapse>
       </Card.Section>
-      <Text weight={850} size={20} my={15}>
-        {cocktail?.cocktail_name ?? 'loading...'}
-      </Text>
+      <Box style={{ display: 'flex', alignItems: 'center' }}>
+        <Text weight={850} size={20} my={15}>
+          {cocktail?.cocktail_name ?? 'loading...'}
+        </Text>
+        <Badge
+          ml="md"
+          color={
+            cocktailProof
+              ? parseFloat(cocktailProof) <= 10
+                ? 'lime'
+                : parseFloat(cocktailProof) <= 20
+                ? 'yellow'
+                : parseFloat(cocktailProof) <= 30
+                ? 'orange'
+                : 'red'
+              : 'cyan'
+          }
+        >
+          {cocktailProof} %
+        </Badge>
+      </Box>
       <Tabs
         styles={{
           tabsList: {
@@ -130,84 +186,91 @@ function CocktailView({ cocktail, isMobileMain }: Props) {
       </Tabs>
       {ingrKeys.length ? (
         ingrKeys.map((key) => {
-          const item = Object.keys(cocktail[key]);
-          const firstItem = item[0];
-          const length = item.length;
-
-          return length ? (
-            //////fix!!!!!!
-            <Box key={`cocktail-view--${String(key)}--${firstItem}`}>
-              {isOpened ? (
-                <CocktailIngrChip
-                  ingredient={firstItem}
-                  ingrKey={key}
-                  activeTab={activeTab}
-                  amount={cocktail[key][firstItem]}
-                />
-              ) : (
-                <Box mb="xs" style={{ display: 'flex', alignItems: 'center' }}>
-                  <NameBadge ingrKey={key} ingredient={key} />
-                  <Badge
-                    color={color[key]}
-                    styles={(theme) => ({
-                      inner: {
-                        fontSize: 12,
-                        textTransform: 'none',
-                        color: theme.colors.gray[6],
-                        display: 'flex',
-                        alignItems: 'center',
-                      },
-                      rightSection: {
-                        marginLeft: 0,
-                      },
-                    })}
-                    variant="dot"
-                    size="md"
-                    mx="xs"
+          const item = cocktail[key];
+          if (item) {
+            const itemKey = Object.keys(item);
+            const firstItem = itemKey[0];
+            const length = itemKey.length;
+            return (
+              //////fix!!!!!!
+              <Box key={`cocktail-view--${String(key)}--${firstItem}`}>
+                {isOpened ? (
+                  firstItem && (
+                    <CocktailIngrChip
+                      ingredient={firstItem}
+                      ingrKey={key}
+                      activeTab={activeTab}
+                      amount={item[firstItem]}
+                    />
+                  )
+                ) : (
+                  <Box
+                    mb="xs"
+                    style={{ display: 'flex', alignItems: 'center' }}
                   >
-                    <Button
-                      variant="subtle"
-                      onClick={() => setIsOpened(!isOpened)}
-                      styles={() => ({
-                        root: {
-                          ':hover': {
-                            backgroundColor: 'rgba(0,0,0,0)',
-                          },
+                    <NameBadge ingrKey={key} ingredient={key} />
+                    <Badge
+                      color={color[key]}
+                      styles={(theme) => ({
+                        inner: {
                           fontSize: 12,
+                          textTransform: 'none',
+                          color: theme.colors.gray[6],
+                          display: 'flex',
+                          alignItems: 'center',
+                        },
+                        rightSection: {
+                          marginLeft: 0,
                         },
                       })}
-                      px={0}
-                      py={10}
+                      variant="dot"
+                      size="md"
+                      mx="xs"
                     >
-                      <Text mr={4} color={theme.colors.gray[3]} weight={800}>
-                        {length}
-                      </Text>
-                      <Plus
-                        color={theme.colors.gray[4]}
-                        size={12}
-                        strokeWidth={1.5}
+                      <Button
+                        variant="subtle"
+                        onClick={() => setIsOpened(!isOpened)}
+                        styles={() => ({
+                          root: {
+                            ':hover': {
+                              backgroundColor: 'rgba(0,0,0,0)',
+                            },
+                            fontSize: 12,
+                          },
+                        })}
+                        px={0}
+                        py={10}
+                      >
+                        <Text mr={4} color={theme.colors.gray[3]} weight={800}>
+                          {length}
+                        </Text>
+                        <Plus
+                          color={theme.colors.gray[4]}
+                          size={12}
+                          strokeWidth={1.5}
+                        />
+                      </Button>
+                    </Badge>
+                  </Box>
+                )}
+                <Collapse in={isOpened}>
+                  {itemKey.map((ingredient, index) => {
+                    return index ? (
+                      <CocktailIngrChip
+                        ingredient={ingredient}
+                        ingrKey={key}
+                        key={`cocktailIngrChip--${String(
+                          key
+                        )}--${ingredient}--${index}`}
+                        activeTab={activeTab}
+                        amount={item[ingredient]}
                       />
-                    </Button>
-                  </Badge>
-                </Box>
-              )}
-              <Collapse in={isOpened}>
-                {item.map((ingredient, index) => {
-                  return index ? (
-                    <CocktailIngrChip
-                      ingredient={ingredient}
-                      ingrKey={key}
-                      key={`cocktailIngrChip--${String(
-                        key
-                      )}--${ingredient}--${index}`}
-                      activeTab={activeTab}
-                      amount={cocktail[key][ingredient]}
-                    />
-                  ) : null;
-                })}
-              </Collapse>
-            </Box>
-          ) : null;
+                    ) : null;
+                  })}
+                </Collapse>
+              </Box>
+            );
+          }
         })
       ) : (
         <Box mb="xs">
@@ -241,7 +304,7 @@ function CocktailView({ cocktail, isMobileMain }: Props) {
           },
         }}
       />
-      <Collapse in={isOpened && cocktail}>
+      <Collapse in={isOpened && !!cocktail}>
         <Paper p="md" style={{ backgroundColor: theme.colors.dark[6] }}>
           <Text>{cocktail?.recipe || 't\nt\nt\n'}</Text>
         </Paper>

@@ -24,10 +24,18 @@ export type ResIngredients = Record<IngredientType, ResIngredient>;
 // {
 //   [Key in IngredientType]?: ResIngredient;
 // };
+
+interface ProofIngredient {
+  [key: string]: number;
+}
 export interface ResCocktail extends Partial<ResIngredients> {
   cocktail_name: string;
   recipe: string;
   img_url: string;
+  proof: {
+    base: ProofIngredient;
+    sub: ProofIngredient;
+  };
 }
 export type ResCocktails = ResCocktail[];
 
