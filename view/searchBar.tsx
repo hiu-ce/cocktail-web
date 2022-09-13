@@ -209,6 +209,7 @@ export default function SearchBar({ scrollToSearchBar }: Props) {
           opened={isModalOpened}
           onClose={() => setIsModalOpened(false)}
           title={cocktailData?.cocktail_name}
+          fullScreen={isMobile}
         >
           {cocktailData && <CocktailView cocktail={cocktailData} />}
         </Modal>

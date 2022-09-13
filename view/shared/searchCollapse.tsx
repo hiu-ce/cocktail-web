@@ -8,7 +8,9 @@ import {
   Modal,
   Paper,
   Title,
+  useMantineTheme,
 } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { useMutation } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { ChevronsUp, GlassFull } from 'tabler-icons-react';
@@ -27,10 +29,13 @@ function SearchCollapse({
   collapseOpenState,
   searchedText,
 }: Props) {
+  const theme = useMantineTheme();
+
   const [searchCollapseIsOpened, setSearchCollapseIsOpened] = collapseOpenState;
   const [loadingCocktail, setLoadingCocktail] = useState('');
   const [cocktailData, setCocktailData] = useState<ResCocktail>();
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`);
 
   const cocktailMutate = useMutation(getCocktails, {
     onSuccess: (data) => {
@@ -90,6 +95,7 @@ function SearchCollapse({
         opened={isModalOpened}
         onClose={() => setIsModalOpened(false)}
         title={cocktailData?.cocktail_name}
+        fullScreen={isMobile}
       >
         {cocktailData && <CocktailView cocktail={cocktailData} />}
       </Modal>
