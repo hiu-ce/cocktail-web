@@ -10,6 +10,18 @@ import { useEffect } from 'react';
 const queryClient = new QueryClient();
 
 export default function App(props: AppProps) {
+  const handleResize = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
   }, []);
