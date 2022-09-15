@@ -83,8 +83,6 @@ function CocktailView({ cocktail, isMobileMain }: Props) {
     }, 0)
   ).toFixed(1);
 
-  // console.log(cocktailProof);
-
   const [activeTab, setActiveTab] = useState<string | null>('ml');
 
   useEffect(() => {

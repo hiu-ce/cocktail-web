@@ -14,7 +14,6 @@ function CocktailViewModal({ cocktail }: Props) {
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`);
   const router = useRouter();
   const isOpened = router.asPath.includes('modal');
-  console.log(cocktail, isOpened && !!cocktail);
 
   return (
     <Modal
@@ -23,6 +22,11 @@ function CocktailViewModal({ cocktail }: Props) {
       onClose={() => router.push('/')}
       title={cocktail?.cocktail_name}
       fullScreen={isMobile}
+      styles={{
+        modal: {
+          position: 'relative',
+        },
+      }}
     >
       {cocktail && <CocktailView cocktail={cocktail} />}
     </Modal>
