@@ -52,13 +52,13 @@ const Home: NextPage = () => {
                 </Center>
               </Grid.Col>
               <Grid.Col xs={2}>
-                <Group
+                {/* <Group
                   position="center"
                   align="center"
                   style={{ height: '100%' }}
                 >
                   <Button onClick={() => setOpened(true)}>Add Recipe</Button>
-                </Group>
+                </Group> */}
               </Grid.Col>
             </Grid>
           </header>
