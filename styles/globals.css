@@ -6,7 +6,9 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif,
     Cocktail, LeferiBase, LeferiPoint, Mabinogi;
   min-height: 100vh;
-  min-height: -webkit-fill-available;
+  @supports (-webkit-touch-callout: none) {
+    min-height: -webkit-fill-available;
+  }
 }
 
 a {
