@@ -5,19 +5,17 @@ import {
   Collapse,
   Group,
   LoadingOverlay,
-  Modal,
   Paper,
   Title,
-  useMantineTheme,
 } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
 import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { ChevronsUp, GlassFull } from 'tabler-icons-react';
 import { getCocktails } from '../../api/api';
 import { ResCocktail, ResCocktailsName } from '../../lib/res.types';
 import { josa } from '../../lib/utils';
-import CocktailView from './cocktailView';
+import CocktailViewModal from './modal/cocktailViewModal';
 
 interface Props {
   cocktailsName: ResCocktailsName | undefined;
@@ -29,19 +27,16 @@ function SearchCollapse({
   collapseOpenState,
   searchedText,
 }: Props) {
-  const theme = useMantineTheme();
-
   const [searchCollapseIsOpened, setSearchCollapseIsOpened] = collapseOpenState;
   const [loadingCocktail, setLoadingCocktail] = useState('');
   const [cocktailData, setCocktailData] = useState<ResCocktail>();
-  const [isModalOpened, setIsModalOpened] = useState(false);
-  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`);
+  const router = useRouter();
 
   const cocktailMutate = useMutation(getCocktails, {
     onSuccess: (data) => {
       setLoadingCocktail('');
       setCocktailData(data);
-      setIsModalOpened(true);
+      router.push('/?modal');
     },
   });
 
@@ -90,7 +85,7 @@ function SearchCollapse({
           </Box>
         </Box>
       </Paper>
-      <Modal
+      {/* <Modal
         centered
         opened={isModalOpened}
         onClose={() => setIsModalOpened(false)}
@@ -98,7 +93,8 @@ function SearchCollapse({
         fullScreen={isMobile}
       >
         {cocktailData && <CocktailView cocktail={cocktailData} />}
-      </Modal>
+      </Modal> */}
+      <CocktailViewModal cocktail={cocktailData} />
     </Collapse>
   );
 }

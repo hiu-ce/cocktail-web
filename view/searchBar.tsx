@@ -5,7 +5,6 @@ import {
   FocusTrap,
   Group,
   MantineColor,
-  Modal,
   SelectItemProps,
   Stack,
   Text,
@@ -13,6 +12,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 import { forwardRef, ReactNode, useState } from 'react';
 import {
   Assembly,
@@ -32,7 +32,7 @@ import {
 } from '../api/api';
 import { ResCocktail } from '../lib/res.types';
 import { SearchItem } from '../lib/types';
-import CocktailView from './shared/cocktailView';
+import CocktailViewModal from './shared/modal/cocktailViewModal';
 import SearchCollapse from './shared/searchCollapse';
 interface ItemProps extends SelectItemProps {
   color: MantineColor;
@@ -60,13 +60,14 @@ interface Props {
 export default function SearchBar({ scrollToSearchBar }: Props) {
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`);
+  const router = useRouter();
 
   const [item, setItem] = useState<SearchItem | undefined>();
   const [value, setValue] = useState('');
   const [searchedText, setSearchedText] = useState('');
   const [searchCollapseIsOpened, setSearchCollapseIsOpened] = useState(false);
   const [cocktailData, setCocktailData] = useState<ResCocktail>();
-  const [isModalOpened, setIsModalOpened] = useState(false);
+  // const [isModalOpened, setIsModalOpened] = useState(false);
 
   const [active, handlers] = useDisclosure(false);
 
@@ -104,7 +105,7 @@ export default function SearchBar({ scrollToSearchBar }: Props) {
   const cocktailMutate = useMutation(getCocktails, {
     onSuccess: (data) => {
       setCocktailData(data);
-      setIsModalOpened(true);
+      router.push('/?modal');
     },
   });
 
@@ -204,15 +205,7 @@ export default function SearchBar({ scrollToSearchBar }: Props) {
             ]}
           />
         </Box>
-        <Modal
-          centered
-          opened={isModalOpened}
-          onClose={() => setIsModalOpened(false)}
-          title={cocktailData?.cocktail_name}
-          fullScreen={isMobile}
-        >
-          {cocktailData && <CocktailView cocktail={cocktailData} />}
-        </Modal>
+        <CocktailViewModal cocktail={cocktailData} />
       </Stack>
     </>
   );
