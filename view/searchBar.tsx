@@ -12,7 +12,6 @@ import {
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
 import { forwardRef, ReactNode, useState } from 'react';
 import {
   Assembly,
@@ -60,14 +59,13 @@ interface Props {
 export default function SearchBar({ scrollToSearchBar }: Props) {
   const theme = useMantineTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`);
-  const router = useRouter();
 
   const [item, setItem] = useState<SearchItem | undefined>();
   const [value, setValue] = useState('');
   const [searchedText, setSearchedText] = useState('');
   const [searchCollapseIsOpened, setSearchCollapseIsOpened] = useState(false);
   const [cocktailData, setCocktailData] = useState<ResCocktail>();
-  // const [isModalOpened, setIsModalOpened] = useState(false);
+  const [isModalOpened, setIsModalOpened] = useState(false);
 
   const [active, handlers] = useDisclosure(false);
 
@@ -105,7 +103,7 @@ export default function SearchBar({ scrollToSearchBar }: Props) {
   const cocktailMutate = useMutation(getCocktails, {
     onSuccess: (data) => {
       setCocktailData(data);
-      router.push('/?modal');
+      setIsModalOpened(true);
     },
   });
 
@@ -205,7 +203,10 @@ export default function SearchBar({ scrollToSearchBar }: Props) {
             ]}
           />
         </Box>
-        <CocktailViewModal cocktail={cocktailData} />
+        <CocktailViewModal
+          cocktail={cocktailData}
+          state={[isModalOpened, setIsModalOpened]}
+        />
       </Stack>
     </>
   );

@@ -9,7 +9,6 @@ import {
   Title,
 } from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { ChevronsUp, GlassFull } from 'tabler-icons-react';
 import { getCocktails } from '../../api/api';
@@ -30,13 +29,13 @@ function SearchCollapse({
   const [searchCollapseIsOpened, setSearchCollapseIsOpened] = collapseOpenState;
   const [loadingCocktail, setLoadingCocktail] = useState('');
   const [cocktailData, setCocktailData] = useState<ResCocktail>();
-  const router = useRouter();
+  const [isModalOpened, setIsModalOpened] = useState(false);
 
   const cocktailMutate = useMutation(getCocktails, {
     onSuccess: (data) => {
       setLoadingCocktail('');
       setCocktailData(data);
-      router.push('/?modal');
+      setIsModalOpened(true);
     },
   });
 
@@ -85,16 +84,10 @@ function SearchCollapse({
           </Box>
         </Box>
       </Paper>
-      {/* <Modal
-        centered
-        opened={isModalOpened}
-        onClose={() => setIsModalOpened(false)}
-        title={cocktailData?.cocktail_name}
-        fullScreen={isMobile}
-      >
-        {cocktailData && <CocktailView cocktail={cocktailData} />}
-      </Modal> */}
-      <CocktailViewModal cocktail={cocktailData} />
+      <CocktailViewModal
+        cocktail={cocktailData}
+        state={[isModalOpened, setIsModalOpened]}
+      />
     </Collapse>
   );
 }

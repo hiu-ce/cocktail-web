@@ -23,3 +23,7 @@ export function mlOzCalc(ml: number) {
   const oz = ml / 30;
   return Math.round(oz * 10) / 10;
 }
+
+export function noneScrollPush(url: string, router: any) {
+  router.push(url, undefined, { scroll: false });
+}

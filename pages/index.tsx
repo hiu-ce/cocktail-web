@@ -1,4 +1,4 @@
-import { Button, Center, Grid, Group, Modal, ScrollArea } from '@mantine/core';
+import { Center, Grid, Modal, ScrollArea } from '@mantine/core';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -6,26 +6,26 @@ import AddRecipe from '../view/addRecipe';
 import SearchBar from '../view/searchBar';
 import CocktailTitle from '../view/title';
 import Body from '../view/body';
+import { useWindowScroll } from '@mantine/hooks';
 
 const Home: NextPage = () => {
   const [opened, setOpened] = useState(false);
   const router = useRouter();
   const viewport = useRef<HTMLDivElement | null>(null);
   const title = useRef<HTMLTitleElement | null>(null);
+  const [, scrollTo] = useWindowScroll();
 
-  const scrollToBottom = () =>
+  const scrollToBottom = () => {
     viewport.current &&
-    viewport.current.scrollTo({
-      top: viewport.current.scrollHeight,
-      behavior: 'smooth',
-    });
+      scrollTo({
+        y: viewport.current.scrollHeight + 500,
+      });
+  };
 
   const scrollToSearchBar = () => {
-    viewport.current &&
-      title.current &&
-      viewport.current.scrollTo({
-        top: title.current.scrollHeight,
-        behavior: 'smooth',
+    title.current &&
+      scrollTo({
+        y: title.current.scrollHeight,
       });
   };
   // call this method whenever you want to refresh server-side props
@@ -37,10 +37,7 @@ const Home: NextPage = () => {
   }, [opened]);
 
   return (
-    <ScrollArea
-      style={{ height: '100vh', overflow: 'hidden' }}
-      viewportRef={viewport}
-    >
+    <ScrollArea style={{ overflow: 'hidden' }} viewportRef={viewport} mx="auto">
       <Center>
         <Grid m="xl" style={{ width: '100%', maxWidth: 1000 }} mb={60}>
           <header ref={title} style={{ width: '100%' }}>
