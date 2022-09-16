@@ -39,11 +39,6 @@ function CocktailViewModal({
       onClose={() => setIsModalOpened(false)}
       title={cocktail?.cocktail_name}
       fullScreen={isMobile}
-      styles={{
-        modal: {
-          position: 'relative',
-        },
-      }}
     >
       {cocktail && <CocktailView cocktail={cocktail} />}
     </Modal>
