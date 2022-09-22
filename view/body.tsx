@@ -136,6 +136,14 @@ function Body({ scrollToBottom }: Props) {
         <CocktailView cocktail={randomCocktail.data} isMobileMain={isMobile} />
       </Grid.Col>
       <Grid.Col xs={6}>
+        <Text
+          className="my-text"
+          style={{ fontFamily: 'Fira Sans' }}
+          weight={isBreakPoint ? 800 : 700}
+          size={isBreakPoint ? 20 : 30}
+        >
+          Search Cocktails By
+        </Text>
         {ingredientsName.isLoading ? (
           <div>{Array(3).map((_, index) => loadingSkeleton(index))}</div>
         ) : (
