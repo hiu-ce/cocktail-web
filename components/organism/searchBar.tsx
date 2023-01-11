@@ -28,11 +28,11 @@ import {
   getProcessedCocktailNames,
   getProcessedIngredientNames,
   searchCocktails,
-} from '../api/api';
-import { ResCocktail } from '../lib/res.types';
-import { SearchItem } from '../lib/types';
-import CocktailViewModal from './shared/modal/cocktailViewModal';
-import SearchCollapse from './shared/searchCollapse';
+} from '../../api/api';
+import { ResCocktail } from '../../lib/res.types';
+import { SearchItem } from '../../lib/types';
+import CocktailViewModal from './cocktailViewModal';
+import SearchCollapse from '../molecules/searchCollapse';
 interface ItemProps extends SelectItemProps {
   color: MantineColor;
   // description: string;

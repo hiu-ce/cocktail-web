@@ -2,9 +2,9 @@ import { Modal, useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useEffect } from 'react';
-import { ResCocktail } from '../../../lib/res.types';
-import { noneScrollPush } from '../../../lib/utils';
-import CocktailView from '../cocktailView';
+import { ResCocktail } from '../../lib/res.types';
+import { noneScrollPush } from '../../lib/utils';
+import CocktailView from './cocktailView';
 
 interface Props {
   cocktail?: ResCocktail;

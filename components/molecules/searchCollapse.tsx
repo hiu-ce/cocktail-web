@@ -14,7 +14,7 @@ import { ChevronsUp, GlassFull } from 'tabler-icons-react';
 import { getCocktails } from '../../api/api';
 import { ResCocktail, ResCocktailsName } from '../../lib/res.types';
 import { josa } from '../../lib/utils';
-import CocktailViewModal from './modal/cocktailViewModal';
+import CocktailViewModal from '../organism/cocktailViewModal';
 
 interface Props {
   cocktailsName: ResCocktailsName | undefined;

@@ -12,9 +12,9 @@ import { showNotification, updateNotification } from '@mantine/notifications';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
 import { Check, X } from 'tabler-icons-react';
-import { createCocktail, getIngredientsGroup } from '../api/api';
-import { ReqIngredients } from '../lib/req.types';
-import InputIngredients from './shared/inputIngredients';
+import { createCocktail, getIngredientsGroup } from '../../api/api';
+import { ReqIngredients } from '../../lib/req.types';
+import InputIngredients from '../organism/inputIngredients';
 
 interface Props {
   setOpened: (opened: boolean) => void;

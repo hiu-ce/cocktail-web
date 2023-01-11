@@ -20,13 +20,13 @@ import {
   getProcessedIngredientNames,
   getRandomCocktail,
   searchCocktails,
-} from '../api/api';
-import { ReqSearch } from '../lib/req.types';
-import { ResCocktailsName } from '../lib/res.types';
-import { SelectSearchItems } from '../lib/types';
-import CocktailView from './shared/cocktailView';
-import IngredientSelector from './shared/ingredientSelector';
-import SearchCollapse from './shared/searchCollapse';
+} from '../../api/api';
+import { ReqSearch } from '../../lib/req.types';
+import { ResCocktailsName } from '../../lib/res.types';
+import { SelectSearchItems } from '../../lib/types';
+import CocktailView from '../organism/cocktailView';
+import IngredientSelector from '../molecules/ingredientSelector';
+import SearchCollapse from '../molecules/searchCollapse';
 
 type ResSearchError = AxiosError<{
   data: ResCocktailsName;

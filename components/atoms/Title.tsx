@@ -1,7 +1,11 @@
 import { Text, useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 
-export default function CocktailTitle() {
+interface Props {
+  children: React.ReactNode;
+}
+
+export default function CocktailTitle({ children }: Props) {
   const isBreakPoint = useMediaQuery('(max-width: 400px)');
 
   const theme = useMantineTheme();
@@ -22,7 +26,7 @@ export default function CocktailTitle() {
         size={isBreakPoint ? 25 : 30}
         transform="uppercase"
       >
-        Cocktail-Recipes
+        {children}
       </Text>
     </>
   );

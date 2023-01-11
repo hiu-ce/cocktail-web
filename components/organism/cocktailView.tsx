@@ -24,7 +24,10 @@ import {
   X,
 } from 'tabler-icons-react';
 import { ResCocktail } from '../../lib/res.types';
-import CocktailIngrChip, { AmountBadge, NameBadge } from './cocktailIngrChip';
+import CocktailIngrChip, {
+  AmountBadge,
+  NameBadge,
+} from '../molecules/cocktailIngrChip';
 
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

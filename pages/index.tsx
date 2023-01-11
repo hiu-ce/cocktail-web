@@ -1,12 +1,12 @@
-import { Center, Grid, Modal, ScrollArea } from '@mantine/core';
+import { Button, Center, Grid, Group, Modal, ScrollArea } from '@mantine/core';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import AddRecipe from '../view/addRecipe';
-import SearchBar from '../view/searchBar';
-import CocktailTitle from '../view/title';
-import Body from '../view/body';
+import AddRecipe from '../components/template/addRecipe';
+import SearchBar from '../components/organism/searchBar';
+import Body from '../components/template/body';
 import { useWindowScroll } from '@mantine/hooks';
+import CocktailTitle from '../components/atoms/Title';
 
 const Home: NextPage = () => {
   const [opened, setOpened] = useState(false);
@@ -45,17 +45,17 @@ const Home: NextPage = () => {
               <Grid.Col xs={2}></Grid.Col>
               <Grid.Col xs={8}>
                 <Center>
-                  <CocktailTitle />
+                  <CocktailTitle>Cocktail-Recipes</CocktailTitle>
                 </Center>
               </Grid.Col>
               <Grid.Col xs={2}>
-                {/* <Group
+                <Group
                   position="center"
                   align="center"
                   style={{ height: '100%' }}
                 >
                   <Button onClick={() => setOpened(true)}>Add Recipe</Button>
-                </Group> */}
+                </Group>
               </Grid.Col>
             </Grid>
           </header>
